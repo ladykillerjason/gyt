@@ -23,7 +23,7 @@ public class ProjectService {
         String projectNo = param.get("projectNo");
         String projectName = param.get("projectName");
         String sPage = param.get("page");
-        String sLimit =  param.get("limit");
+        String sLimit = param.get("limit");
         Integer page = 0;
         Integer limit = 15;
         if (!StringUtils.isEmpty(sPage)) {
@@ -48,27 +48,26 @@ public class ProjectService {
         return dao.findProjects(map);
     }
 
-    public boolean checkHasPatientNo(String patientNo){
-        Map<String,String> tm = new HashMap<>();
-        tm.put("project_no", patientNo);
+    public boolean checkHasPatientNo(String patientNo) {
+        Map<String, String> tm = new HashMap<>();
+        tm.put("projectNo", patientNo);
         List<Map> ret = findProjects(tm);
-        if(ret.size() > 0){
+        if (ret.size() > 0) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
-
-    public Map<String,String> addProject(Map<String, String> param) {
-        Map<String,String> ret = new HashMap<>();
+    public Map<String, String> addProject(Map<String, String> param) {
+        Map<String, String> ret = new HashMap<>();
         ret.put("status", "fail");
         ret.put("msg", "新增失败");
         String projectNo = param.get("projectNo");
         String projectName = param.get("projectName");
         String projectPrice = param.get("projectPrice");
 
-        if(checkHasPatientNo(projectNo)){
+        if (checkHasPatientNo(projectNo)) {
             ret.put("msg", "新增失败，已有项目编号");
             return ret;
         }
@@ -87,32 +86,30 @@ public class ProjectService {
             map.put("project_price", projectPrice);
         }
         int retV = dao.insertProject(map);
-        if (retV == 0) {
+        if (retV > 0) {
             ret.put("status", "success");
-            ret.put("msg","插入成功");
+            ret.put("msg", "插入成功");
             return ret;
         } else {
             return ret;
         }
     }
 
-    public Map<String,String> editProject(Map<String, String> param) {
-        Map<String,String> ret = new HashMap<>();
+    public Map<String, String> editProject(Map<String, String> param) {
+        Map<String, String> ret = new HashMap<>();
         ret.put("status", "fail");
         ret.put("msg", "修改失败");
-        String id = param.get("id");
         String projectNo = param.get("projectNo");
         String projectName = param.get("projectName");
         String projectPrice = param.get("projectPrice");
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("id", id);
         map.put("project_no", projectNo);
         map.put("project_name", projectName);
         map.put("project_price", projectPrice);
         int retV = dao.updateProject(map);
         if (retV > 0) {
             ret.put("status", "success");
-            ret.put("msg","修改成功");
+            ret.put("msg", "修改成功");
             return ret;
         } else {
             return ret;

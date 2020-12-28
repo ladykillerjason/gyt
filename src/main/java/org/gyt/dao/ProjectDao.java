@@ -10,12 +10,9 @@ import java.util.Map;
 public interface ProjectDao {
 
     @Select("<script>"
-        + "select id,project_no projectNo,project_name projectName,project_price projectPrice "
+        + "select project_no projectNo,project_name projectName,project_price projectPrice "
         + "from t_project "
         + "where 1=1 "
-        + "<if test=\"id !=null and id!='' \">"
-        + "and id = #{id} "
-        + "</if>"
         + "<if test=\"project_no !=null and project_no!='' \">"
         + "and project_no = #{project_no} "
         + "</if>"
@@ -38,8 +35,8 @@ public interface ProjectDao {
     @Update("<script>"
         + "update t_project "
         + "set "
-        + "project_no = #{project_no},project_name=#{project_name},project_price=#{project_price},"
-        + "where id = #{id}"
+        + "project_name=#{project_name},project_price=#{project_price},"
+        + "where project_no = #{project_no}"
         + "</script>")
     public int updateProject(Map map);
 
