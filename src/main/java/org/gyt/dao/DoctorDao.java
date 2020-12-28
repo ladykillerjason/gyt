@@ -11,10 +11,10 @@ public interface DoctorDao {
 
 
     @Select("<script>"
-        + "select id,doc_no docNo,doc_name docName,doc_phone docPhone,doc_title docTitle,doc_role docRole from t_doctor "
+        + "select doc_no docNo,doc_name docName,doc_pass docPass,doc_phone docPhone,doc_title docTitle,doc_role docRole from t_doctor "
         + "where 1=1 "
-        + "<if test=\"id !=null and id!='' \">"
-        + "and id = #{id} "
+        + "<if test=\"doc_no !=null and doc_no!='' \">"
+        + "and doc_no = #{doc_no} "
         + "</if>"
         + "<if test=\"doc_name !=null and doc_name!='' \">"
         + "and doc_name = #{doc_name} "
@@ -37,13 +37,6 @@ public interface DoctorDao {
         + "</script>")
     public List<Map> findDoctors(Map<String, Object> map);
 
-    /**
-     * 数据数目
-     *
-     * @param map
-     * @return
-     */
-    public Long getTotalDoctors(Map<String, Object> map);
 
     @Insert("<script>"
         + "insert into "
@@ -55,9 +48,9 @@ public interface DoctorDao {
     @Update("<script>"
         + "update t_doctor "
         + "set "
-        + "doc_no = #{doc_no},doc_pass=#{doc_pass},doc_name=#{doc_name},doc_phone=#{doc_phone},"
+        + "doc_pass=#{doc_pass},doc_name=#{doc_name},doc_phone=#{doc_phone},"
         + "doc_title=#{doc_title},doc_role=#{doc_role} "
-        + "where id = #{id}"
+        + "where doc_no = #{doc_no}"
         + "</script>")
     public int updateDoctor(Map map);
 

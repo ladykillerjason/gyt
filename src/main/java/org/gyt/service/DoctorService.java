@@ -20,14 +20,14 @@ public class DoctorService {
     @Autowired
     DoctorDao dao;
 
-    public boolean checkLogin(String name,String password){
-        Map<String,Object> map  = new HashMap();
+    public boolean checkLogin(String name, String password) {
+        Map<String, Object> map = new HashMap();
         map.put("name", name);
         map.put("password", ShaUtil.shaEncode(password));
         List<Map> retList = dao.findDoctors(map);
-        if(retList.size() == 0){
+        if (retList.size() == 0) {
             return false;
-        }else{
+        } else {
             return true;
         }
     }
@@ -36,8 +36,9 @@ public class DoctorService {
         String docNo = param.get("docNo");
         String docName = param.get("docName");
         String docPhone = param.get("docPhone");
+        String docTitle = param.get("docTitle");
         String sPage = param.get("page");
-        String sLimit =  param.get("limit");
+        String sLimit = param.get("limit");
         Integer page = 0;
         Integer limit = 15;
         if (!StringUtils.isEmpty(sPage)) {
@@ -51,34 +52,28 @@ public class DoctorService {
         }
         Integer start = page * limit;
         Map<String, Object> map = new HashMap<String, Object>();
-        if (!StringUtils.isEmpty(docNo)) {
-            map.put("doc_no", docNo);
-        }
-        if (!StringUtils.isEmpty(docName)) {
-            map.put("doc_name", docName);
-        }
-        if (!StringUtils.isEmpty(docPhone)) {
-            map.put("doc_phone", docPhone);
-        }
+        map.put("doc_no", docNo);
+        map.put("doc_name", docName);
+        map.put("doc_phone", docPhone);
+        map.put("doc_title", docTitle);
         map.put("start", start);
         map.put("size", limit);
         return dao.findDoctors(map);
     }
 
-    public boolean checkHasDocNo(String docNo){
-        Map<String,String> tm = new HashMap<>();
-        tm.put("doc_no", docNo);
+    public boolean checkHasDocNo(String docNo) {
+        Map<String, String> tm = new HashMap<>();
+        tm.put("docNo", docNo);
         List<Map> ret = findDoctors(tm);
-        if(ret.size() > 0){
+        if (ret.size() > 0) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
-
-    public Map<String,String> addDoctor(Map<String, String> param) {
-        Map<String,String> ret = new HashMap<>();
+    public Map<String, String> addDoctor(Map<String, String> param) {
+        Map<String, String> ret = new HashMap<>();
         ret.put("status", "fail");
         ret.put("msg", "新增失败");
         String docNo = param.get("docNo");
@@ -87,7 +82,7 @@ public class DoctorService {
         String docPhone = param.get("docPhone");
         String docTitle = param.get("docTitle");
 
-        if(checkHasDocNo(docNo)){
+        if (checkHasDocNo(docNo)) {
             ret.put("msg", "新增失败，已有医生编号");
             return ret;
         }
@@ -113,28 +108,27 @@ public class DoctorService {
         if (!StringUtils.isEmpty(docTitle)) {
             map.put("doc_title", docTitle);
         }
+        map.put("doc_role", "user");
         int retV = dao.insertDoctor(map);
-        if (retV == 0) {
+        if (retV > 0) {
             ret.put("status", "success");
-            ret.put("msg","插入成功");
+            ret.put("msg", "插入成功");
             return ret;
         } else {
             return ret;
         }
     }
 
-    public Map<String,String> editDoctor(Map<String, String> param) {
-        Map<String,String> ret = new HashMap<>();
+    public Map<String, String> editDoctor(Map<String, String> param) {
+        Map<String, String> ret = new HashMap<>();
         ret.put("status", "fail");
         ret.put("msg", "修改失败");
-        String id = param.get("id");
         String docNo = param.get("docNo");
         String docPass = param.get("docPass");
         String docName = param.get("docName");
         String docPhone = param.get("docPhone");
         String docTitle = param.get("docTitle");
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("id", id);
         map.put("doc_no", docNo);
         map.put("doc_pass", docPass);
         map.put("doc_name", docName);
@@ -143,7 +137,7 @@ public class DoctorService {
         int retV = dao.updateDoctor(map);
         if (retV > 0) {
             ret.put("status", "success");
-            ret.put("msg","修改成功");
+            ret.put("msg", "修改成功");
             return ret;
         } else {
             return ret;

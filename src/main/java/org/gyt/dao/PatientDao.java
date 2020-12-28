@@ -10,12 +10,9 @@ import java.util.Map;
 public interface PatientDao {
 
     @Select("<script>"
-        + "select id,patient_no patientNo,patient_name patientName,patient_phone patientPhone,patient_sex patientSex "
+        + "select patient_no patientNo,patient_name patientName,patient_phone patientPhone,patient_sex patientSex,patient_age patientAge,patient_memo patientMemo  "
         + "from t_patient "
         + "where 1=1 "
-        + "<if test=\"id !=null and id!='' \">"
-        + "and id = #{id} "
-        + "</if>"
         + "<if test=\"patient_no !=null and patient_no!='' \">"
         + "and patient_no = #{patient_no} "
         + "</if>"
@@ -35,7 +32,6 @@ public interface PatientDao {
     public List<Map> findPatients(Map<String, Object> map);
 
 
-    public Long getTotalPatients(Map<String, Object> map);
 
     @Insert("<script>"
         + "insert into "
@@ -47,9 +43,9 @@ public interface PatientDao {
     @Update("<script>"
         + "update t_patient "
         + "set "
-        + "patient_no = #{patient_no},patient_name=#{patient_name},patient_phone=#{patient_phone},"
+        + "patient_name=#{patient_name},patient_phone=#{patient_phone},"
         + "patient_sex=#{patient_sex},patient_age=#{patient_age},patient_memo=#{patient_memo} "
-        + "where id = #{id}"
+        + "where patient_no = #{patient_no}"
         + "</script>")
     public int updatePatient(Map map);
 
