@@ -1,0 +1,113 @@
+{
+  "homeInfo": {
+    "title": "首页",
+    "href": "page/welcome.html"
+  },
+  "logoInfo": {
+    "title": "",
+    "image": "images/logo.jpg",
+    "href": ""
+  },
+  "menuInfo": [
+    {
+      "title": "国医堂",
+      "icon": "fa fa-address-book",
+      "href": "",
+      "target": "_self",
+      "child": [
+        {
+          "title": "排队业务",
+          "href": "",
+          "icon": "fa fa-users",
+          "target": "_self",
+          "child": [
+            {
+              "title": "开治疗单",
+              "href": "page/treatBill/add-treatBill.html",
+              "icon": "fa fa-pencil",
+              "target": "_self"
+            },
+            {
+              "title": "入队列",
+              "href": "page/patientQueue/add-patientQueue.html",
+              "icon": "fa fa-plus-circle",
+              "target": "_self"
+            },
+            {
+              "title": "查看队列",
+              "href": "page/patientQueue/show-queue.html",
+              "icon": "fa fa-eye",
+              "target": "_self"
+            },
+            {
+              "title": "结束治疗",
+              "href": "page/patientQueue/finishTreat.html",
+              "icon": "fa fa-check",
+              "target": "_self"
+            }
+          ]
+        },
+
+        {
+          "title": "统计",
+          "href": "",
+          "icon": "fa fa-bar-chart",
+          "target": "_self",
+          "child": [
+            {
+              "title": "统计开单人",
+              "href": "page/stat/statKaiDanRen.html",
+              "icon": "fa fa-bar-chart",
+              "target": "_self"
+            },
+            {
+              "title": "统计治疗师",
+              "href": "page/stat/statZhiLiaoShi.html",
+              "icon": "fa fa-bar-chart",
+              "target": "_self"
+            },
+            {
+              "title": "统计病人",
+              "href": "page/stat/statPatient.html",
+              "icon": "fa fa-bar-chart",
+              "target": "_self"
+            },
+            {
+              "title": "统计项目",
+              "href": "page/stat/statProject.html",
+              "icon": "fa fa-bar-chart",
+              "target": "_self"
+            }
+          ]
+        },
+
+        {
+          "title": "后台管理",
+          "href": "",
+          "icon": "fa fa-list-alt",
+          "target": "_self",
+          "child": [
+            {
+              "title": "医生信息维护",
+              "href": "page/doctor/table-doctor.html",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            },
+            {
+              "title": "病人信息维护",
+              "href": "page/patient/table-patient.html",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            },
+            {
+              "title": "项目信息维护",
+              "href": "page/project/table-project.html",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
