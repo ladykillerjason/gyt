@@ -1,5 +1,6 @@
 package org.gyt.dao;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -39,5 +40,12 @@ public interface ProjectDao {
         + "where project_no = #{project_no}"
         + "</script>")
     public int updateProject(Map map);
+
+    @Delete("<script>"
+        + "delete from t_project "
+        + "where 1=1 "
+        + "and project_no = #{project_no}"
+        + "</script>")
+    public int deleteProject(Map map);
 
 }

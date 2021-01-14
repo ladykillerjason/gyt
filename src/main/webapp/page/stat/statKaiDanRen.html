@@ -52,13 +52,6 @@
             </div>
         </fieldset>
 
-        <script type="text/html" id="toolbarDemo">
-            <div class="layui-btn-container">
-                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
-                <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 删除 </button>
-            </div>
-        </script>
-
         <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
 
         <script type="text/html" id="currentTableBar">
@@ -123,8 +116,8 @@
                 }
                 , where:{'docNo':$("input[name='docNo']").val(),
                     'docName':$("input[name='docName']").val(),
-                    'startTime':$("input[name='startTime']").val().replace("T"," ")+":00",
-                    'endTime':$("input[name='endTime']").val().replace("T"," ")+":00"
+                    'startTime':$("input[name='startTime']").val()===""?"":$("input[name='startTime']").val().replace("T"," ")+":00",
+                    'endTime':$("input[name='endTime']").val()===""?"":$("input[name='endTime']").val().replace("T"," ")+":00"
                 },
             }, 'data');
 

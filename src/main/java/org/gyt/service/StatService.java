@@ -151,4 +151,29 @@ public class StatService {
         return statDao.statByProject(map);
     }
 
+    public List<Map> statMoneyOfKaidanRen(Map<String, String> param) {
+
+        String startTime = param.get("startTime");
+        String endTime = param.get("endTime");
+
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        map.put("start_time", startTime);
+        map.put("end_time", endTime);
+
+        return statDao.statMoneyOfKaidanRen(map);
+    }
+
+    public List<Map> statMoneyOfZhiliaoshi(Map<String, String> param) {
+
+        String startTime = param.get("startTime");
+        String endTime = param.get("endTime");
+
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        map.put("start_time", startTime);
+        map.put("end_time", endTime);
+
+        return statDao.statMoneyOfZhiliaoshi(map);
+    }
 }

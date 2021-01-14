@@ -52,12 +52,12 @@
             </div>
         </fieldset>
 
-        <script type="text/html" id="toolbarDemo">
-            <div class="layui-btn-container">
-                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
-                <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 删除 </button>
-            </div>
-        </script>
+<!--        <script type="text/html" id="toolbarDemo">-->
+<!--            <div class="layui-btn-container">-->
+<!--                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>-->
+<!--                <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 删除 </button>-->
+<!--            </div>-->
+<!--        </script>-->
 
         <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
 
@@ -100,8 +100,9 @@
                 {field: 'patientName', width: 300, title: '病人姓名'},
                 {field: 'projectName', width: 200, title: '项目名称'},
                 {field: 'treatTotalCount', width: 200, title: '总治疗次数'},
-                {field: 'treatCount', width: 200, title: '做的第几次治疗'},
-                {field: 'docName', width: 300, title: '治疗师姓名', sort: true},
+                {field: 'treatCount', width: 200, title: '第几次治疗'},
+                {field: 'zhiliaoshiName', width: 200, title: '治疗师', sort: true},
+                {field: 'kaidanName', width: 200, title: '开单医生', sort: true},
                 {field: 'treatTime', width: 300, title: '治疗时间', sort: true},
             ]],
             limits: [10, 15, 20, 25, 50, 100],
@@ -121,8 +122,8 @@
                 }
                 , where:{'patientNo':$("input[name='patientNo']").val(),
                     'patientName':$("input[name='patientName']").val(),
-                    'startTime':$("input[name='startTime']").val().replace("T"," ")+":00",
-                    'endTime':$("input[name='endTime']").val().replace("T"," ")+":00"
+                    'startTime':$("input[name='startTime']").val()===""?"":$("input[name='startTime']").val().replace("T"," ")+":00",
+                    'endTime':$("input[name='endTime']").val()===""?"":$("input[name='endTime']").val().replace("T"," ")+":00"
                 },
             }, 'data');
 

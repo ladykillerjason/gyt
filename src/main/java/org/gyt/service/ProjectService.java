@@ -115,4 +115,23 @@ public class ProjectService {
             return ret;
         }
     }
+
+    public Map<String, String> deleteProject(Map<String, String> param) {
+        Map<String, String> ret = new HashMap<>();
+        ret.put("status", "fail");
+        ret.put("msg", "删除失败");
+        String projectNo = param.get("projectNo");
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("project_no", projectNo);
+        int retV = dao.deleteProject(map);
+        if (retV > 0) {
+            ret.put("status", "success");
+            ret.put("msg", "删除成功");
+            return ret;
+        } else {
+            return ret;
+        }
+    }
+
+
 }

@@ -25,8 +25,11 @@ public interface StatDao {
         + "<if test=\"doc_name !=null and doc_name!='' \">"
         + "and d.doc_name = #{doc_name} "
         + "</if>"
-        + "<if test=\"start_name !=null and start_name!='' \">"
-        + "and log.treat_time &gt;= #{start_name} and log.treat_time &lt;= #{end_time}"
+        + "<if test=\"start_time !=null and start_time!='' \">"
+        + "and log.treat_time &gt;= #{start_time} "
+        + "</if>"
+        + "<if test=\"end_time !=null and end_time!='' \">"
+        + "and log.treat_time &lt;= #{end_time}"
         + "</if>"
 
         + "<if test=\"start !=null and start!='' \">"
@@ -51,8 +54,11 @@ public interface StatDao {
         + "and d.doc_name = #{doc_name} "
         + "</if>"
 
-        + "<if test=\"start_name !=null and start_name!='' \">"
-        + "and bill.create_time &gt;= #{start_name} and bill.create_time &lt;= #{end_time}"
+        + "<if test=\"start_time !=null and start_time!='' \">"
+        + "and bill.create_time &gt;= #{start_time} "
+        + "</if>"
+        + "<if test=\"end_time !=null and end_time!='' \">"
+        + "and bill.create_time &lt;= #{end_time} "
         + "</if>"
 
         + "<if test=\"start !=null and start!='' \">"
@@ -63,13 +69,15 @@ public interface StatDao {
 
 
     @Select("<script>"
-        + "select p1.patient_no patientNo,p1.patient_name patientName,p2.project_name projectName,bill.treat_total_count treatTotalCount,log.treat_time treatTime,d.doc_name docName,log.treat_count treatCount "
+        + "select t1.patientNo,t1.patientName,t1.projectName,t1.treatTotalCount,t1.treatCount,t1.treatTime,t1.zhiliaoshiName,t2.doc_name kaidanName "
+        + "from "
+        + "(select p1.patient_no patientNo,p1.patient_name patientName,p2.project_name projectName,bill.kaidan_no kaidanNo, "
+        + "bill.treat_total_count treatTotalCount,log.treat_time treatTime,d.doc_name zhiliaoshiName,log.treat_count treatCount "
         + "from t_treat_log log left join t_treat_bill bill on log.tb_id = bill.id "
         + "left join t_doctor d on d.doc_no = log.zhiliao_no "
         + "left join t_patient p1 on bill.patient_no = p1.patient_no "
         + "left join t_project p2 on bill.project_no = p2.project_no "
-        + "where 1=1 "
-
+        + "where p1.patient_no is not null "
         + "<if test=\"patient_no !=null and patient_no!='' \">"
         + "and p1.patient_no = #{patient_no} "
         + "</if>"
@@ -77,9 +85,15 @@ public interface StatDao {
         + "and p1.patient_name = #{patient_name} "
         + "</if>"
 
-        + "<if test=\"start_name !=null and start_name!='' \">"
-        + "and log.treat_time &gt;= #{start_name} and log.treat_time &lt;= #{end_time}"
+        + "<if test=\"start_time !=null and start_time!='' \">"
+        + "and log.treat_time &gt;= #{start_time} "
         + "</if>"
+        + "<if test=\"end_time !=null and end_time!='' \">"
+        + "and log.treat_time &lt;= #{end_time} "
+        + "</if>"
+
+        + ") as t1 "
+        + "left join t_doctor t2 on t1.kaidanNo = t2.doc_no"
 
         + "<if test=\"start !=null and start!='' \">"
         + "limit #{start},#{size} "
@@ -103,8 +117,11 @@ public interface StatDao {
         + "and p2.project_name = #{project_name} "
         + "</if>"
 
-        + "<if test=\"start_name !=null and start_name!='' \">"
-        + "and bill.create_time &gt;= #{start_name} and bill.create_time &lt;= #{end_time}"
+        + "<if test=\"start_time !=null and start_time!='' \">"
+        + "and bill.create_time &gt;= #{start_time} "
+        + "</if>"
+        + "<if test=\"end_time !=null and end_time!='' \">"
+        + "and bill.create_time &lt;= #{end_time} "
         + "</if>"
 
         + "<if test=\"start !=null and start!='' \">"
@@ -113,4 +130,44 @@ public interface StatDao {
         + "</script>")
     public List<Map> statByProject(Map<String, Object> map);
 
+
+
+    @Select("<script>"
+        + "SELECT d.doc_name kaidanName,sum(p2.project_price) totalSum "
+        + "from t_treat_log log "
+        + "left join t_treat_bill bill on log.tb_id = bill.id "
+        + "left join t_project p2 on bill.project_no = p2.project_no "
+        + "left join t_doctor d on bill.kaidan_no = d.doc_no "
+        + "where 1=1 "
+        + "<if test=\"start_time !=null and start_time!='' \">"
+        + "and log.treat_time &gt;= #{start_time} "
+        + "</if>"
+        + "<if test=\"end_time !=null and end_time!='' \">"
+        + "and log.treat_time &lt;= #{end_time} "
+        + "</if>"
+
+        + " GROUP BY d.doc_name "
+
+        + "</script>")
+    public List<Map> statMoneyOfKaidanRen(Map<String, Object> map);
+
+
+    @Select("<script>"
+        + "SELECT d.doc_name zhiliaoshiName,sum(p2.project_price) totalSum "
+        + "from t_treat_log log "
+        + "left join t_treat_bill bill on log.tb_id = bill.id "
+        + "left join t_project p2 on bill.project_no = p2.project_no "
+        + "left join t_doctor d on log.zhiliao_no = d.doc_no "
+        + "where 1=1 "
+        + "<if test=\"start_time !=null and start_time!='' \">"
+        + "and log.treat_time &gt;= #{start_time} "
+        + "</if>"
+        + "<if test=\"end_time !=null and end_time!='' \">"
+        + "and log.treat_time &lt;= #{end_time} "
+        + "</if>"
+
+        + " GROUP BY d.doc_name "
+
+        + "</script>")
+    public List<Map> statMoneyOfZhiliaoshi(Map<String, Object> map);
 }

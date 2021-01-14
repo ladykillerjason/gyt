@@ -41,4 +41,10 @@ public class ProjectController {
         return projectService.editProject(param);
     }
 
+    @RequestMapping(value = "/delete", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+    @ResponseBody
+    public Map deleteProject(@RequestBody Map<String, String> param) {
+        return projectService.deleteProject(param);
+    }
+
 }

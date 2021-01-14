@@ -73,9 +73,15 @@
               "target": "_self"
             },
             {
-              "title": "统计项目",
-              "href": "page/stat/statProject.html",
-              "icon": "fa fa-bar-chart",
+              "title": "统计金额-开单人",
+              "href": "page/stat/statKaiDanRen-money.html",
+              "icon": "fa fa-cny",
+              "target": "_self"
+            },
+            {
+              "title": "统计金额-治疗师",
+              "href": "page/stat/statZhiLiaoShi-money.html",
+              "icon": "fa fa-cny",
               "target": "_self"
             }
           ]

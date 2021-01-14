@@ -97,9 +97,9 @@
             cols: [[
                 // {type: "checkbox", width: 50},
                 // {field: 'id', width: 200, title: 'ID', sort: true,hide:true},
-                {field: 'projectName', width: 200, title: '项目名称'},
-                {field: 'patientName', width: 300, title: '病人姓名'},
-                {field: 'treatTime', width: 300, title: '治疗时间', sort: true},
+                {field: 'projectName', width: 400, title: '项目名称'},
+                {field: 'patientName', width: 500, title: '病人姓名'},
+                {field: 'treatTime', width: 500, title: '治疗时间', sort: true},
             ]],
             limits: [10, 15, 20, 25, 50, 100],
             limit: 15,
@@ -118,8 +118,8 @@
                 }
                 , where:{'projectNo':$("input[name='projectNo']").val(),
                     'projectName':$("input[name='projectName']").val(),
-                    'startTime':$("input[name='startTime']").val().replace("T"," ")+":00",
-                    'endTime':$("input[name='endTime']").val().replace("T"," ")+":00"
+                    'startTime':$("input[name='startTime']").val()===""?"":$("input[name='startTime']").val().replace("T"," ")+":00",
+                    'endTime':$("input[name='endTime']").val()===""?"":$("input[name='endTime']").val().replace("T"," ")+":00"
                 },
             }, 'data');
 

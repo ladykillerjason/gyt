@@ -1,0 +1,14 @@
+部署过程
+
+在server.xml中添加
+<Context path="/" docBase="../webapps/gyt" debug="0" reloadable="true">
+	<WatchedResource>WEB-INF/web.xml</WatchedResource>
+</Context>
+
+在catalina.sh中添加
+set "JAVA_OPTS=%JAVA_OPTS% -Djava.protocol.handler.pkgs=org.apache.catalina.webresources -Dfile.encoding=UTF-8"
+
+
+下载mysql
+https://dev.mysql.com/downloads/mysql/5.7.html?os=src
+https://downloads.mysql.com/archives/community/

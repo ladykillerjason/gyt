@@ -41,4 +41,9 @@ public class PatientController {
         return patientService.editPatient(param);
     }
 
+    @RequestMapping(value = "/delete", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+    @ResponseBody
+    public Map deletePatient(@RequestBody Map<String, String> param) {
+        return patientService.deletePatient(param);
+    }
 }

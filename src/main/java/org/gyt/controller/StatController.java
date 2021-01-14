@@ -50,4 +50,18 @@ public class StatController {
         return ret;
     }
 
+    @RequestMapping(value = "/statMoneyOfKaidanRen", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+    @ResponseBody
+    public List<Map> statMoneyOfKaidanRen(@RequestBody Map<String, String> param) {
+        List<Map> ret = statService.statMoneyOfKaidanRen(param);
+        return ret;
+    }
+
+    @RequestMapping(value = "/statMoneyOfZhiliaoshi", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+    @ResponseBody
+    public List<Map> statMoneyOfZhiliaoshi(@RequestBody Map<String, String> param) {
+        List<Map> ret = statService.statMoneyOfZhiliaoshi(param);
+        return ret;
+    }
+
 }

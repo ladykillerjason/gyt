@@ -154,7 +154,7 @@
                     maxmin:true,
                     shadeClose: true,
                     area: ['80%', '80%'],
-                    content: './edit-patient.html?id='+data['id'],
+                    content: './edit-project.html?projectNo='+data['projectNo'],
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
@@ -162,8 +162,30 @@
                 return false;
             } else if (obj.event === 'delete') {
                 layer.confirm('真的删除行么', function (index) {
-                    obj.del();
-                    layer.close(index);
+                    // obj.del();
+                    // layer.close(index);
+                    $.ajax({
+                        url:'/project/delete.do',
+                        type:'post',
+                        dataType:'json',
+                        contentType: 'application/json',
+                        data:JSON.stringify(data),
+                        timeout:2000,
+                        success:function(data){
+                            console.log(data);
+                            if(data.status == 'success'){
+                                layer.msg("删除成功");
+                                layer.close(index);
+                                window.location.reload();
+
+                            }else{
+                                layer.msg("删除失败")
+                            }
+                        },
+                        error:function () {
+                            layer.msg("删除失败")
+                        }
+                    })
                 });
             }
         });
