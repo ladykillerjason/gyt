@@ -1,5 +1,6 @@
 package org.gyt.dao;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -53,5 +54,12 @@ public interface DoctorDao {
         + "where doc_no = #{doc_no}"
         + "</script>")
     public int updateDoctor(Map map);
+
+    @Delete("<script>"
+        + "delete from t_doctor "
+        + "where 1=1 "
+        + "and doc_no = #{doc_no}"
+        + "</script>")
+    public int deleteDoctor(Map map);
 
 }

@@ -16,15 +16,7 @@
 </head>
 <body>
 <div class="layui-form layuimini-form">
-
-    <div class="layui-form-item" style="display: none">
-        <label class="layui-form-label required">id</label>
-        <div class="layui-input-block">
-            <input type="text" name="id" lay-verify="required"  value="" class="layui-input">
-            <tip>数据库id</tip>
-        </div>
-    </div>
-
+<form>
     <div class="layui-form-item">
         <label class="layui-form-label required">编号</label>
         <div class="layui-input-block">
@@ -62,13 +54,8 @@
             <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
         </div>
     </div>
+</form>
 
-
-    <div class="layui-form-item">
-        <div class="layui-input-block">
-            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
-        </div>
-    </div>
 </div>
 </div>
 <script src="../../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
@@ -87,7 +74,7 @@
             $ = layui.$;
 
         var tmpParam = {};
-        tmpParam['id'] = getUrlParam('id');
+        tmpParam['docNo'] = getUrlParam('docNo');
         layui.$.ajax({
             url:'/doctor/list.do',
             type:'post',
@@ -97,12 +84,18 @@
             timeout:2000,
             success:function(res){
                 var data = res[0];
-                $("input[name=id]").val(data['id'])
                 $("input[name=docNo]").val(data['docNo'])
                 $("input[name=docName]").val(data['docName'])
                 $("input[name=docPass]").val(data['docPass'])
                 $("input[name=docPhone]").val(data['docPhone'])
-                $("input[name=docTitle]").val(data['docTitle'])
+                if(data['docTitle'] === '开单人'){
+                    $("input[name='docTitle'][value='开单人']").attr("checked","checked");
+                    $("input[name='docTitle'][value='治疗师']").removeAttr("checked");
+                }else{
+                    $("input[name='docTitle'][value='开单人']").removeAttr("checked");
+                    $("input[name='docTitle'][value='治疗师']").attr("checked","checked");
+                }
+                form.render();
             },
             error:function () {
                 layer.msg("获取数据失败")
@@ -111,24 +104,26 @@
 
         //监听提交
         form.on('submit(saveBtn)', function (data) {
-            var index = layer.alert(JSON.stringify(data.field), {
-                title: '最终的提交信息'
+            var index = layer.alert("请确认是否提交", {
+                title: '提示'
             }, function () {
+                var postParam = data.field
+                // postParam['docTitle'] = $("input[name=docTitle][checked]").val();
                 $.ajax({
                     url:'/doctor/edit.do',
                     type:'post',
                     dataType:'json',
                     contentType: 'application/json',
-                    data:JSON.stringify(data.field),
-                    timeout:2000,
+                    data:JSON.stringify(postParam),
+                    timeout:5000,
                     success:function(data){
                         console.log(data);
                         if(data.status == 'success'){
                             layer.msg("修改成功");
-
                             layer.close(index);
                             var iframeIndex = parent.layer.getFrameIndex(window.name);
                             parent.layer.close(iframeIndex);
+                            parent.location.reload()
                         }else{
                             layer.msg("修改失败")
                         }

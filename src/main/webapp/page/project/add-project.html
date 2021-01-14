@@ -51,13 +51,13 @@
 
         //监听提交
         form.on('submit(saveBtn)', function (data) {
-            var index = layer.alert(JSON.stringify(data.field), {
-                title: '最终的提交信息'
+            var index = layer.alert('请确认是否提交', {
+                title: '提示'
             }, function () {
                 $.ajax({
                     url:'/project/add',
                     type:'post',
-                    dataType:'text',
+                    dataType:'json',
                     contentType: 'application/json',
                     data:JSON.stringify(data.field),
                     timeout:2000,
@@ -65,18 +65,25 @@
                         console.log(data);
                         if(data.status == 'success'){
                             layer.msg("新增成功");
-
                             layer.close(index);
                             var iframeIndex = parent.layer.getFrameIndex(window.name);
                             parent.layer.close(iframeIndex);
+                            parent.location.reload()
+
                         }else{
-                            layer.msg(data.msg)
+                            layer.msg("新增失败")
                         }
                     },
                     error:function () {
                         layer.msg("新增失败")
                     }
                 })
+
+                // 关闭弹出层
+                layer.close(index);
+
+                var iframeIndex = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(iframeIndex);
 
             });
 

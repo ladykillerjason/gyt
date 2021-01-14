@@ -143,4 +143,21 @@ public class DoctorService {
             return ret;
         }
     }
+
+    public Map<String, String> deleteDoctor(Map<String, String> param) {
+        Map<String, String> ret = new HashMap<>();
+        ret.put("status", "fail");
+        ret.put("msg", "删除失败");
+        String docNo = param.get("docNo");
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("doc_no", docNo);
+        int retV = dao.deleteDoctor(map);
+        if (retV > 0) {
+            ret.put("status", "success");
+            ret.put("msg", "删除成功");
+            return ret;
+        } else {
+            return ret;
+        }
+    }
 }

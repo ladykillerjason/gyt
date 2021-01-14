@@ -20,13 +20,7 @@
 </head>
 <body>
 <div class="layui-form layuimini-form">
-    <div class="layui-form-item" style="display: none">
-        <label class="layui-form-label required">id</label>
-        <div class="layui-input-block">
-            <input type="text" name="id" lay-verify="required"  value="" class="layui-input">
-            <tip>数据库id</tip>
-        </div>
-    </div>
+
     <div class="layui-form-item">
         <label class="layui-form-label required">病人编号</label>
         <div class="layui-input-block">
@@ -91,7 +85,7 @@
             $ = layui.$;
 
         var tmpParam = {};
-        tmpParam['id'] = getUrlParam('id');
+        tmpParam['patientNo'] = getUrlParam('patientNo');
         layui.$.ajax({
             url:'/patient/list.do',
             type:'post',
@@ -101,13 +95,12 @@
             timeout:2000,
             success:function(res){
                 var data = res[0];
-                $("input[name=id]").val(data['id'])
                 $("input[name=patientNo]").val(data['patientNo'])
                 $("input[name=patientName]").val(data['patientName'])
                 $("input[name=patientAge]").val(data['patientAge'])
                 $("input[name=patientPhone]").val(data['patientPhone'])
                 $("input[name=patientSex]").val(data['patientSex'])
-                $("input[name=patientMemo]").val(data['patientMemo'])
+                $("textarea[name=patientMemo]").val(data['patientMemo'])
             },
             error:function () {
                 layer.msg("获取数据失败")
@@ -117,8 +110,8 @@
 
         //监听提交
         form.on('submit(saveBtn)', function (data) {
-            var index = layer.alert(JSON.stringify(data.field), {
-                title: '最终的提交信息'
+            var index = layer.alert("请确认是否提交", {
+                title: '提示'
             }, function () {
 
                 $.ajax({
@@ -132,10 +125,11 @@
                         console.log(data);
                         if(data.status == 'success'){
                             layer.msg("修改成功");
-
                             layer.close(index);
                             var iframeIndex = parent.layer.getFrameIndex(window.name);
                             parent.layer.close(iframeIndex);
+                            parent.location.reload()
+
                         }else{
                             layer.msg("修改失败")
                         }

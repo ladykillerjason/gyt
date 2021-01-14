@@ -57,6 +57,7 @@
             elem: '#currentTableId',
             url: '/treatBill/list.do',
             method: 'post',
+            where:{'isOver':'否'},
             contentType: 'application/json;charset=UTF-8',
             toolbar: '#toolbarDemo',
             defaultToolbar: ['filter', 'exports', 'print', {
@@ -155,7 +156,7 @@
                             setTimeout( function(){
                                 var iframeIndex = parent.layer.getFrameIndex(window.name);
                                 parent.layer.close(iframeIndex);
-                                parent.location.reload();
+                                window.location.reload();
                             }, 1 * 1000 );
 
                         }else{

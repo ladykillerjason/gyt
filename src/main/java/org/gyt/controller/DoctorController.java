@@ -58,4 +58,9 @@ public class DoctorController {
         return doctorService.editDoctor(param);
     }
 
+    @RequestMapping(value = "/delete", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+    @ResponseBody
+    public Map deleteDoctor(@RequestBody Map<String, String> param) {
+        return doctorService.deleteDoctor(param);
+    }
 }
