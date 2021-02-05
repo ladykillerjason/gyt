@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,15 +20,15 @@
                 <form class="layui-form layui-form-pane" action="">
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label">项目编号</label>
+                            <label class="layui-form-label">病人编号</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="projectNo" autocomplete="off" class="layui-input">
+                                <input type="text" name="patientNo" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <label class="layui-form-label">项目名称</label>
+                            <label class="layui-form-label">病人姓名</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="projectName" autocomplete="off" class="layui-input">
+                                <input type="text" name="patientName" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
@@ -63,7 +64,7 @@
 
         table.render({
             elem: '#currentTableId',
-            url: '/project/list.do',
+            url: '/patient/list.do',
             method: 'post',
             contentType: 'application/json;charset=UTF-8',
             toolbar: '#toolbarDemo',
@@ -83,9 +84,12 @@
             cols: [[
                 // {type: "checkbox", width: 50},
                 // {field: 'id', width: 200, title: 'ID', sort: true,hide:true},
-                {field: 'projectNo', width: 200, title: '项目编号', sort: true},
-                {field: 'projectName', width: 400, title: '项目名字'},
-                {field: 'projectPrice', width: 400, title: '价格', },
+                {field: 'patientNo', width: 200, title: '编号', sort: true},
+                {field: 'patientName', width: 200, title: '姓名'},
+                {field: 'patientPhone', width: 200, title: '手机'},
+                {field: 'patientSex', width: 200, title: '性别', },
+                {field: 'patientAge', width: 200, title: '年龄'},
+                {field: 'patientMemo', width: 300, title: '备注', sort: true},
                 {title: '操作', minWidth: 200, toolbar: '#currentTableBar', align: "center"}
             ]],
             limits: [10, 15, 20, 25, 50, 100],
@@ -97,17 +101,14 @@
         // 监听搜索操作
         form.on('submit(data-search-btn)', function (data) {
             var result = JSON.stringify(data.field);
-            // layer.alert(result, {
-            //     title: '最终的搜索信息'
-            // });
 
             //执行搜索重载
             table.reload('currentTableId', {
                 page: {
                     curr: 1
                 }
-                , where:{'projectNo':$("input[name='projectNo']").val(),
-                    'projectName':$("input[name='projectName']").val()
+                , where:{'patientNo':$("input[name='patientNo']").val(),
+                    'patientName':$("input[name='patientName']").val()
                 },
             }, 'data');
 
@@ -120,13 +121,13 @@
         table.on('toolbar(currentTableFilter)', function (obj) {
             if (obj.event === 'add') {  // 监听添加操作
                 var index = layer.open({
-                    title: '添加项目信息',
+                    title: '添加病人信息',
                     type: 2,
                     shade: 0.2,
                     maxmin:true,
                     shadeClose: true,
                     area: ['80%', '80%'],
-                    content: '../page/table/add-patient.html',
+                    content: './add-patient.jsp',
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
@@ -154,7 +155,9 @@
                     maxmin:true,
                     shadeClose: true,
                     area: ['80%', '80%'],
-                    content: './edit-project.html?projectNo='+data['projectNo'],
+                    // content: './edit-patient.jsp?id='+data['id']+'&patientNo='+data['patientNo']+'&patientName='+data['patientName']+
+                    //     '&patientSex='+data['patientSex']+'&patientAge='+data['patientAge']+'&patientMemo='+data['patientMemo'],
+                    content: './edit-patient.jsp?patientNo='+data['patientNo'],
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
@@ -165,7 +168,7 @@
                     // obj.del();
                     // layer.close(index);
                     $.ajax({
-                        url:'/project/delete.do',
+                        url:'/patient/delete.do',
                         type:'post',
                         dataType:'json',
                         contentType: 'application/json',

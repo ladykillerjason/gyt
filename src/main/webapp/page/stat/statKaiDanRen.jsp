@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,17 +20,31 @@
                 <form class="layui-form layui-form-pane" action="">
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label">病人编号</label>
+                            <label class="layui-form-label">开单人编号</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="patientNo" autocomplete="off" class="layui-input">
+                                <input type="text" name="docNo" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <label class="layui-form-label">病人姓名</label>
+                            <label class="layui-form-label">开单人姓名</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="patientName" autocomplete="off" class="layui-input">
+                                <input type="text" name="docName" autocomplete="off" class="layui-input">
                             </div>
                         </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">开始时间</label>
+                            <div class="layui-input-inline">
+                                <input type="datetime-local" name="startTime" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">结束时间</label>
+                            <div class="layui-input-inline">
+                                <input type="datetime-local" name="endTime" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
                         <div class="layui-inline">
                             <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
                         </div>
@@ -37,13 +52,6 @@
                 </form>
             </div>
         </fieldset>
-
-        <script type="text/html" id="toolbarDemo">
-            <div class="layui-btn-container">
-                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
-<!--                <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 删除 </button>-->
-            </div>
-        </script>
 
         <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
 
@@ -63,7 +71,7 @@
 
         table.render({
             elem: '#currentTableId',
-            url: '/patient/list.do',
+            url: '/stat/statByKaiDanRen.do',
             method: 'post',
             contentType: 'application/json;charset=UTF-8',
             toolbar: '#toolbarDemo',
@@ -81,15 +89,16 @@
                 };
             },
             cols: [[
-                // {type: "checkbox", width: 50},
+                {type: "checkbox", width: 50},
                 // {field: 'id', width: 200, title: 'ID', sort: true,hide:true},
-                {field: 'patientNo', width: 200, title: '编号', sort: true},
-                {field: 'patientName', width: 200, title: '姓名'},
-                {field: 'patientPhone', width: 200, title: '手机'},
-                {field: 'patientSex', width: 200, title: '性别', },
-                {field: 'patientAge', width: 200, title: '年龄'},
-                {field: 'patientMemo', width: 300, title: '备注', sort: true},
-                {title: '操作', minWidth: 200, toolbar: '#currentTableBar', align: "center"}
+                {field: 'docName', width: 130, title: '开单人姓名'},
+                {field: 'treatBillNo', width: 200, title: '治疗单编号'},
+                {field: 'patientName', width: 130, title: '病人姓名'},
+                {field: 'projectName', width: 200, title: '项目名称'},
+                {field: 'treatTotalCount', width: 200, title: '总共治疗次数' },
+                {field: 'createTime', width: 300, title: '开单时间'},
+                {field: 'isOver', width: 100, title: '是否结束'},
+                {field: 'overTime', width: 200, title: '结束时间'},
             ]],
             limits: [10, 15, 20, 25, 50, 100],
             limit: 15,
@@ -106,8 +115,10 @@
                 page: {
                     curr: 1
                 }
-                , where:{'patientNo':$("input[name='patientNo']").val(),
-                    'patientName':$("input[name='patientName']").val()
+                , where:{'docNo':$("input[name='docNo']").val(),
+                    'docName':$("input[name='docName']").val(),
+                    'startTime':$("input[name='startTime']").val()===""?"":$("input[name='startTime']").val().replace("T"," ")+":00",
+                    'endTime':$("input[name='endTime']").val()===""?"":$("input[name='endTime']").val().replace("T"," ")+":00"
                 },
             }, 'data');
 
@@ -126,7 +137,7 @@
                     maxmin:true,
                     shadeClose: true,
                     area: ['80%', '80%'],
-                    content: './add-patient.html',
+                    content: './add-patient.jsp',
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
@@ -154,9 +165,9 @@
                     maxmin:true,
                     shadeClose: true,
                     area: ['80%', '80%'],
-                    // content: './edit-patient.html?id='+data['id']+'&patientNo='+data['patientNo']+'&patientName='+data['patientName']+
+                    // content: './edit-patient.jsp?id='+data['id']+'&patientNo='+data['patientNo']+'&patientName='+data['patientName']+
                     //     '&patientSex='+data['patientSex']+'&patientAge='+data['patientAge']+'&patientMemo='+data['patientMemo'],
-                    content: './edit-patient.html?patientNo='+data['patientNo'],
+                    content: './edit-patient.jsp?id='+data['id'],
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
@@ -164,30 +175,8 @@
                 return false;
             } else if (obj.event === 'delete') {
                 layer.confirm('真的删除行么', function (index) {
-                    // obj.del();
-                    // layer.close(index);
-                    $.ajax({
-                        url:'/patient/delete.do',
-                        type:'post',
-                        dataType:'json',
-                        contentType: 'application/json',
-                        data:JSON.stringify(data),
-                        timeout:2000,
-                        success:function(data){
-                            console.log(data);
-                            if(data.status == 'success'){
-                                layer.msg("删除成功");
-                                layer.close(index);
-                                window.location.reload();
-
-                            }else{
-                                layer.msg("删除失败")
-                            }
-                        },
-                        error:function () {
-                            layer.msg("删除失败")
-                        }
-                    })
+                    obj.del();
+                    layer.close(index);
                 });
             }
         });

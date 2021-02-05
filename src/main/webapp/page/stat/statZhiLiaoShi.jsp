@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,15 +20,15 @@
                 <form class="layui-form layui-form-pane" action="">
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label">项目编号</label>
+                            <label class="layui-form-label">治疗师编号</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="projectNo" autocomplete="off" class="layui-input">
+                                <input type="text" name="docNo" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <label class="layui-form-label">项目姓名</label>
+                            <label class="layui-form-label">治疗师姓名</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="projectName" autocomplete="off" class="layui-input">
+                                <input type="text" name="docName" autocomplete="off" class="layui-input">
                             </div>
                         </div>
 
@@ -52,12 +53,6 @@
             </div>
         </fieldset>
 
-        <script type="text/html" id="toolbarDemo">
-            <div class="layui-btn-container">
-<!--                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>-->
-<!--                <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 删除 </button>-->
-            </div>
-        </script>
 
         <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
 
@@ -77,7 +72,7 @@
 
         table.render({
             elem: '#currentTableId',
-            url: '/stat/statByProject.do',
+            url: '/stat/statByZhiLiaoShi.do',
             method: 'post',
             contentType: 'application/json;charset=UTF-8',
             toolbar: '#toolbarDemo',
@@ -97,9 +92,12 @@
             cols: [[
                 // {type: "checkbox", width: 50},
                 // {field: 'id', width: 200, title: 'ID', sort: true,hide:true},
-                {field: 'projectName', width: 400, title: '项目名称'},
-                {field: 'patientName', width: 500, title: '病人姓名'},
-                {field: 'treatTime', width: 500, title: '治疗时间', sort: true},
+                {field: 'docName', width: 300, title: '治疗师姓名', sort: true},
+                {field: 'patientName', width: 300, title: '病人姓名'},
+                {field: 'projectName', width: 200, title: '项目名称'},
+                {field: 'treatTotalCount', width: 200, title: '总共治疗次数', },
+                {field: 'treatCount', width: 200, title: '做的第几次治疗'},
+                {field: 'treatTime', width: 300, title: '治疗时间', sort: true},
             ]],
             limits: [10, 15, 20, 25, 50, 100],
             limit: 15,
@@ -116,8 +114,8 @@
                 page: {
                     curr: 1
                 }
-                , where:{'projectNo':$("input[name='projectNo']").val(),
-                    'projectName':$("input[name='projectName']").val(),
+                , where:{'docNo':$("input[name='docNo']").val(),
+                    'docName':$("input[name='docName']").val(),
                     'startTime':$("input[name='startTime']").val()===""?"":$("input[name='startTime']").val().replace("T"," ")+":00",
                     'endTime':$("input[name='endTime']").val()===""?"":$("input[name='endTime']").val().replace("T"," ")+":00"
                 },
@@ -138,7 +136,7 @@
                     maxmin:true,
                     shadeClose: true,
                     area: ['80%', '80%'],
-                    content: './add-patient.html',
+                    content: './add-patient.jsp',
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
@@ -166,9 +164,9 @@
                     maxmin:true,
                     shadeClose: true,
                     area: ['80%', '80%'],
-                    // content: './edit-patient.html?id='+data['id']+'&patientNo='+data['patientNo']+'&patientName='+data['patientName']+
+                    // content: './edit-patient.jsp?id='+data['id']+'&patientNo='+data['patientNo']+'&patientName='+data['patientName']+
                     //     '&patientSex='+data['patientSex']+'&patientAge='+data['patientAge']+'&patientMemo='+data['patientMemo'],
-                    content: './edit-patient.html?id='+data['id'],
+                    content: './edit-patient.jsp?id='+data['id'],
                 });
                 $(window).on("resize", function () {
                     layer.full(index);

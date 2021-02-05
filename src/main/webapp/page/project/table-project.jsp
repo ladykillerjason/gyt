@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,31 +20,17 @@
                 <form class="layui-form layui-form-pane" action="">
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label">病人编号</label>
+                            <label class="layui-form-label">项目编号</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="patientNo" autocomplete="off" class="layui-input">
+                                <input type="text" name="projectNo" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <label class="layui-form-label">病人姓名</label>
+                            <label class="layui-form-label">项目名称</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="patientName" autocomplete="off" class="layui-input">
+                                <input type="text" name="projectName" autocomplete="off" class="layui-input">
                             </div>
                         </div>
-
-                        <div class="layui-inline">
-                            <label class="layui-form-label">开始时间</label>
-                            <div class="layui-input-inline">
-                                <input type="datetime-local" name="startTime" autocomplete="off" class="layui-input">
-                            </div>
-                        </div>
-                        <div class="layui-inline">
-                            <label class="layui-form-label">结束时间</label>
-                            <div class="layui-input-inline">
-                                <input type="datetime-local" name="endTime" autocomplete="off" class="layui-input">
-                            </div>
-                        </div>
-
                         <div class="layui-inline">
                             <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
                         </div>
@@ -52,12 +39,12 @@
             </div>
         </fieldset>
 
-<!--        <script type="text/html" id="toolbarDemo">-->
-<!--            <div class="layui-btn-container">-->
-<!--                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>-->
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
 <!--                <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 删除 </button>-->
-<!--            </div>-->
-<!--        </script>-->
+            </div>
+        </script>
 
         <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
 
@@ -77,7 +64,7 @@
 
         table.render({
             elem: '#currentTableId',
-            url: '/stat/statByPatient.do',
+            url: '/project/list.do',
             method: 'post',
             contentType: 'application/json;charset=UTF-8',
             toolbar: '#toolbarDemo',
@@ -97,13 +84,10 @@
             cols: [[
                 // {type: "checkbox", width: 50},
                 // {field: 'id', width: 200, title: 'ID', sort: true,hide:true},
-                {field: 'patientName', width: 300, title: '病人姓名'},
-                {field: 'projectName', width: 200, title: '项目名称'},
-                {field: 'treatTotalCount', width: 200, title: '总治疗次数'},
-                {field: 'treatCount', width: 200, title: '第几次治疗'},
-                {field: 'zhiliaoshiName', width: 200, title: '治疗师', sort: true},
-                {field: 'kaidanName', width: 200, title: '开单医生', sort: true},
-                {field: 'treatTime', width: 300, title: '治疗时间', sort: true},
+                {field: 'projectNo', width: 200, title: '项目编号', sort: true},
+                {field: 'projectName', width: 400, title: '项目名字'},
+                {field: 'projectPrice', width: 400, title: '价格', },
+                {title: '操作', minWidth: 200, toolbar: '#currentTableBar', align: "center"}
             ]],
             limits: [10, 15, 20, 25, 50, 100],
             limit: 15,
@@ -114,16 +98,17 @@
         // 监听搜索操作
         form.on('submit(data-search-btn)', function (data) {
             var result = JSON.stringify(data.field);
+            // layer.alert(result, {
+            //     title: '最终的搜索信息'
+            // });
 
             //执行搜索重载
             table.reload('currentTableId', {
                 page: {
                     curr: 1
                 }
-                , where:{'patientNo':$("input[name='patientNo']").val(),
-                    'patientName':$("input[name='patientName']").val(),
-                    'startTime':$("input[name='startTime']").val()===""?"":$("input[name='startTime']").val().replace("T"," ")+":00",
-                    'endTime':$("input[name='endTime']").val()===""?"":$("input[name='endTime']").val().replace("T"," ")+":00"
+                , where:{'projectNo':$("input[name='projectNo']").val(),
+                    'projectName':$("input[name='projectName']").val()
                 },
             }, 'data');
 
@@ -136,13 +121,13 @@
         table.on('toolbar(currentTableFilter)', function (obj) {
             if (obj.event === 'add') {  // 监听添加操作
                 var index = layer.open({
-                    title: '添加病人信息',
+                    title: '添加项目信息',
                     type: 2,
                     shade: 0.2,
                     maxmin:true,
                     shadeClose: true,
                     area: ['80%', '80%'],
-                    content: './add-patient.html',
+                    content: '../page/table/add-patient.jsp',
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
@@ -170,9 +155,7 @@
                     maxmin:true,
                     shadeClose: true,
                     area: ['80%', '80%'],
-                    // content: './edit-patient.html?id='+data['id']+'&patientNo='+data['patientNo']+'&patientName='+data['patientName']+
-                    //     '&patientSex='+data['patientSex']+'&patientAge='+data['patientAge']+'&patientMemo='+data['patientMemo'],
-                    content: './edit-patient.html?id='+data['id'],
+                    content: './edit-project.jsp?projectNo='+data['projectNo'],
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
@@ -180,8 +163,30 @@
                 return false;
             } else if (obj.event === 'delete') {
                 layer.confirm('真的删除行么', function (index) {
-                    obj.del();
-                    layer.close(index);
+                    // obj.del();
+                    // layer.close(index);
+                    $.ajax({
+                        url:'/project/delete.do',
+                        type:'post',
+                        dataType:'json',
+                        contentType: 'application/json',
+                        data:JSON.stringify(data),
+                        timeout:2000,
+                        success:function(data){
+                            console.log(data);
+                            if(data.status == 'success'){
+                                layer.msg("删除成功");
+                                layer.close(index);
+                                window.location.reload();
+
+                            }else{
+                                layer.msg("删除失败")
+                            }
+                        },
+                        error:function () {
+                            layer.msg("删除失败")
+                        }
+                    })
                 });
             }
         });

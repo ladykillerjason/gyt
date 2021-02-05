@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,18 +19,6 @@
             <div style="margin: 10px 10px 10px 10px">
                 <form class="layui-form layui-form-pane" action="">
                     <div class="layui-form-item">
-                        <div class="layui-inline">
-                            <label class="layui-form-label">开单人编号</label>
-                            <div class="layui-input-inline">
-                                <input type="text" name="docNo" autocomplete="off" class="layui-input">
-                            </div>
-                        </div>
-                        <div class="layui-inline">
-                            <label class="layui-form-label">开单人姓名</label>
-                            <div class="layui-input-inline">
-                                <input type="text" name="docName" autocomplete="off" class="layui-input">
-                            </div>
-                        </div>
 
                         <div class="layui-inline">
                             <label class="layui-form-label">开始时间</label>
@@ -52,6 +41,7 @@
             </div>
         </fieldset>
 
+
         <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
 
         <script type="text/html" id="currentTableBar">
@@ -70,7 +60,7 @@
 
         table.render({
             elem: '#currentTableId',
-            url: '/stat/statByKaiDanRen.do',
+            url: '/stat/statMoneyOfZhiliaoshi.do',
             method: 'post',
             contentType: 'application/json;charset=UTF-8',
             toolbar: '#toolbarDemo',
@@ -88,20 +78,14 @@
                 };
             },
             cols: [[
-                {type: "checkbox", width: 50},
+                // {type: "checkbox", width: 50},
                 // {field: 'id', width: 200, title: 'ID', sort: true,hide:true},
-                {field: 'docName', width: 130, title: '开单人姓名'},
-                {field: 'treatBillNo', width: 200, title: '治疗单编号'},
-                {field: 'patientName', width: 130, title: '病人姓名'},
-                {field: 'projectName', width: 200, title: '项目名称'},
-                {field: 'treatTotalCount', width: 200, title: '总共治疗次数' },
-                {field: 'createTime', width: 300, title: '开单时间'},
-                {field: 'isOver', width: 100, title: '是否结束'},
-                {field: 'overTime', width: 200, title: '结束时间'},
+                {field: 'zhiliaoshiName', width: 500, title: '治疗师姓名'},
+                {field: 'totalSum', width: 1000, title: '总收益', sort: true},
             ]],
-            limits: [10, 15, 20, 25, 50, 100],
-            limit: 15,
-            page: 1,
+            // limits: [10, 15, 20, 25, 50, 100],
+            // limit: 15,
+            // page: 1,
             skin: 'line'
         });
 
@@ -114,8 +98,7 @@
                 page: {
                     curr: 1
                 }
-                , where:{'docNo':$("input[name='docNo']").val(),
-                    'docName':$("input[name='docName']").val(),
+                , where:{
                     'startTime':$("input[name='startTime']").val()===""?"":$("input[name='startTime']").val().replace("T"," ")+":00",
                     'endTime':$("input[name='endTime']").val()===""?"":$("input[name='endTime']").val().replace("T"," ")+":00"
                 },
@@ -124,61 +107,7 @@
             return false;
         });
 
-        /**
-         * toolbar监听事件
-         */
-        table.on('toolbar(currentTableFilter)', function (obj) {
-            if (obj.event === 'add') {  // 监听添加操作
-                var index = layer.open({
-                    title: '添加病人信息',
-                    type: 2,
-                    shade: 0.2,
-                    maxmin:true,
-                    shadeClose: true,
-                    area: ['80%', '80%'],
-                    content: './add-patient.html',
-                });
-                $(window).on("resize", function () {
-                    layer.full(index);
-                });
-            } else if (obj.event === 'delete') {  // 监听删除操作
-                var checkStatus = table.checkStatus('currentTableId')
-                    , data = checkStatus.data;
-                layer.alert(JSON.stringify(data));
-            }
-        });
 
-        //监听表格复选框选择
-        table.on('checkbox(currentTableFilter)', function (obj) {
-            console.log(obj)
-        });
-
-        table.on('tool(currentTableFilter)', function (obj) {
-            var data = obj.data;
-            if (obj.event === 'edit') {
-
-                var index = layer.open({
-                    title: '编辑病人信息',
-                    type: 2,
-                    shade: 0.2,
-                    maxmin:true,
-                    shadeClose: true,
-                    area: ['80%', '80%'],
-                    // content: './edit-patient.html?id='+data['id']+'&patientNo='+data['patientNo']+'&patientName='+data['patientName']+
-                    //     '&patientSex='+data['patientSex']+'&patientAge='+data['patientAge']+'&patientMemo='+data['patientMemo'],
-                    content: './edit-patient.html?id='+data['id'],
-                });
-                $(window).on("resize", function () {
-                    layer.full(index);
-                });
-                return false;
-            } else if (obj.event === 'delete') {
-                layer.confirm('真的删除行么', function (index) {
-                    obj.del();
-                    layer.close(index);
-                });
-            }
-        });
 
     });
 </script>

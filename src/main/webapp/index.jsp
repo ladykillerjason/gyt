@@ -17,6 +17,6 @@
 <script type="text/javascript" src="js/index.js" ></script>
 </body>
 <script>
-    window.location.href="main.jsp"
+    window.location.href="/page/main"
 </script>
 </html>

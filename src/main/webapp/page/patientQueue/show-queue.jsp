@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,27 +20,15 @@
                 <form class="layui-form layui-form-pane" action="">
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label">医生编号</label>
+                            <label class="layui-form-label">编号</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="docNo" autocomplete="off" class="layui-input">
+                                <input type="text" name="patientNo" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <label class="layui-form-label">医生姓名</label>
+                            <label class="layui-form-label">姓名</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="docName" autocomplete="off" class="layui-input">
-                            </div>
-                        </div>
-                        <div class="layui-inline">
-                            <label class="layui-form-label">手机</label>
-                            <div class="layui-input-inline">
-                                <input type="text" name="docPhone" autocomplete="off" class="layui-input">
-                            </div>
-                        </div>
-                        <div class="layui-inline">
-                            <label class="layui-form-label">职位</label>
-                            <div class="layui-input-inline">
-                                <input type="text" name="docTitle" autocomplete="off" class="layui-input">
+                                <input type="text" name="patientName" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
@@ -53,14 +42,13 @@
         <script type="text/html" id="toolbarDemo">
             <div class="layui-btn-container">
                 <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
-<!--                <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 删除 </button>-->
             </div>
         </script>
 
         <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
 
         <script type="text/html" id="currentTableBar">
-            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="query">查看</a>
             <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
         </script>
 
@@ -75,7 +63,7 @@
 
         table.render({
             elem: '#currentTableId',
-            url: '/doctor/list.do',
+            url: '/patientQueue/list.do',
             method: 'post',
             contentType: 'application/json;charset=UTF-8',
             toolbar: '#toolbarDemo',
@@ -93,13 +81,12 @@
                 };
             },
             cols: [[
-                // {type: "checkbox", width: 50},
+                {type: "checkbox", width: 50},
                 // {field: 'id', width: 200, title: 'ID', sort: true,hide:true},
-                {field: 'docNo', width: 200, title: '编号', sort: true},
-                {field: 'docName', width: 200, title: '姓名'},
-                {field: 'docPass', width: 200, title: '密码'},
-                {field: 'docPhone', width: 400, title: '手机'},
-                {field: 'docTitle', width: 200, title: '职位'},
+                {field: 'treatBillNo', width: 300, title: '治疗单编号'},
+                {field: 'patientName', width: 200, title: '病人名字'},
+                {field: 'patientPhone', width: 200, title: '病人手机'},
+                {field: 'projectName', width: 200, title: '项目名称'},
                 {title: '操作', minWidth: 200, toolbar: '#currentTableBar', align: "center"}
             ]],
             limits: [10, 15, 20, 25, 50, 100],
@@ -110,7 +97,7 @@
 
         // 监听搜索操作
         form.on('submit(data-search-btn)', function (data) {
-            var result = JSON.stringify(data.field);
+            // var result = JSON.stringify(data.field);
             // layer.alert(result, {
             //     title: '最终的搜索信息'
             // });
@@ -120,11 +107,8 @@
                 page: {
                     curr: 1
                 }
-                , where:{
-                    'docNo':$("input[name='docNo']").val(),
-                    'docName':$("input[name='docName']").val(),
-                    'docPhone':$("input[name='docPhone']").val(),
-                    'docTitle':$("input[name='docTitle']").val()
+                , where:{'patientNo':$("input[name='patientNo']").val(),
+                    'patientName':$("input[name='patientName']").val()
                 },
             }, 'data');
 
@@ -137,13 +121,13 @@
         table.on('toolbar(currentTableFilter)', function (obj) {
             if (obj.event === 'add') {  // 监听添加操作
                 var index = layer.open({
-                    title: '添加医生信息',
+                    title: '添加排队信息',
                     type: 2,
                     shade: 0.2,
                     maxmin:true,
                     shadeClose: true,
-                    area: ['80%', '80%'],
-                    content: './add-doctor.html',
+                    area: ['90%', '90%'],
+                    content: './add-patientQueue.jsp',
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
@@ -162,16 +146,16 @@
 
         table.on('tool(currentTableFilter)', function (obj) {
             var data = obj.data;
-            if (obj.event === 'edit') {
+            if (obj.event === 'query') {
 
                 var index = layer.open({
-                    title: '编辑病人信息',
+                    title: '查看治疗单信息',
                     type: 2,
                     shade: 0.2,
                     maxmin:true,
                     shadeClose: true,
                     area: ['80%', '80%'],
-                    content: './edit-doctor.html?docNo='+data['docNo'],
+                    content: './query-treatBill.jsp?treatBillNo='+data['treatBillNo'],
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
@@ -179,31 +163,32 @@
                 return false;
             } else if (obj.event === 'delete') {
                 layer.confirm('真的删除行么', function (index) {
-                    // obj.del();
-                    // layer.close(index);
-                    $.ajax({
-                        url:'/doctor/delete.do',
+                    console.log(obj.data);
+                    var tm = {};
+                    tm['patientNo'] = obj.data['patientNo'];
+                    tm['treatBillNo'] = obj.data['treatBillNo'];
+                    tm['projectNo'] = obj.data['projectNo'];
+                    layui.$.ajax({
+                        url:'/patientQueue/delete.do',
                         type:'post',
                         dataType:'json',
                         contentType: 'application/json',
-                        data:JSON.stringify(data),
+                        data:JSON.stringify(tm),
                         timeout:2000,
-                        success:function(data){
-                            console.log(data);
-                            if(data.status == 'success'){
-                                layer.msg("删除成功");
-                                layer.close(index);
-                                window.location.reload();
-
+                        success:function(res){
+                            if(res.status == 'success'){
+                                layer.msg("删除排队信息成功")
                             }else{
-                                layer.msg("删除失败")
+                                layer.msg("删除排队信息失败")
                             }
                         },
                         error:function () {
-                            layer.msg("删除失败")
+                            layer.msg("删除排队信息失败")
                         }
                     })
-
+                    // 界面删除
+                    obj.del();
+                    layer.close(index);
                 });
             }
         });

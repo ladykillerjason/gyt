@@ -1,7 +1,4 @@
-<!--
-  ~ Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
-  -->
-
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,53 +17,46 @@
 </head>
 <body>
 <div class="layui-form layuimini-form">
-
+<form>
     <div class="layui-form-item">
-        <label class="layui-form-label required">病人编号</label>
+        <label class="layui-form-label required">编号</label>
         <div class="layui-input-block">
-            <input type="text" name="patientNo" lay-verify="required" lay-reqtext="病人编号不能为空" placeholder="请输入病人编号" value="" class="layui-input">
-            <tip>填写病人编号。</tip>
+            <input type="text" name="docNo" lay-verify="required" lay-reqtext="编号不能为空" placeholder="请输入编号" value="" class="layui-input">
+<!--            <tip>填写自己管理账号的名称。</tip>-->
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label required">病人名字</label>
+        <label class="layui-form-label required">姓名</label>
         <div class="layui-input-block">
-            <input type="text" name="patientName" lay-verify="required" lay-reqtext="病人名字不能为空" placeholder="请输入病人名字" value="" class="layui-input">
-            <tip>填写病人名字。</tip>
+            <input type="text" name="docName" lay-verify="required" lay-reqtext="医生姓名不能为空" placeholder="请输入医生姓名" value="" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label required">性别</label>
+        <label class="layui-form-label required">密码</label>
         <div class="layui-input-block">
-            <input type="radio" name="patientSex" value="男" title="男" checked="">
-            <input type="radio" name="patientSex" value="女" title="女">
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">年龄</label>
-        <div class="layui-input-block">
-            <input type="text" name="patientAge" placeholder="请输入年龄" value="" class="layui-input">
+            <input type="text" name="docPass" lay-verify="required" lay-reqtext="登陆密码不能为空" placeholder="请输入登陆密码" value="" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label required">手机</label>
         <div class="layui-input-block">
-            <input type="number" name="patientPhone" lay-verify="required" lay-reqtext="手机不能为空" placeholder="请输入手机" value="" class="layui-input">
+            <input type="text" name="docPhone" lay-verify="required" lay-reqtext="医生手机号不能为空" placeholder="请输入医生手机号" value="" class="layui-input">
         </div>
     </div>
-
-    <div class="layui-form-item layui-form-text">
-        <label class="layui-form-label">备注信息</label>
+    <div class="layui-form-item">
+        <label class="layui-form-label required">职位</label>
         <div class="layui-input-block">
-            <textarea name="patientMemo" class="layui-textarea" placeholder="请输入备注信息"></textarea>
+            <input type="radio" name="docTitle" value="开单人" title="开单人" checked="">
+            <input type="radio" name="docTitle" value="治疗师" title="治疗师">
         </div>
     </div>
-
     <div class="layui-form-item">
         <div class="layui-input-block">
             <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
         </div>
     </div>
+</form>
+
 </div>
 </div>
 <script src="../../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
@@ -85,9 +75,9 @@
             $ = layui.$;
 
         var tmpParam = {};
-        tmpParam['patientNo'] = getUrlParam('patientNo');
+        tmpParam['docNo'] = getUrlParam('docNo');
         layui.$.ajax({
-            url:'/patient/list.do',
+            url:'/doctor/list.do',
             type:'post',
             dataType:'json',
             contentType: 'application/json',
@@ -95,32 +85,38 @@
             timeout:2000,
             success:function(res){
                 var data = res[0];
-                $("input[name=patientNo]").val(data['patientNo'])
-                $("input[name=patientName]").val(data['patientName'])
-                $("input[name=patientAge]").val(data['patientAge'])
-                $("input[name=patientPhone]").val(data['patientPhone'])
-                $("input[name=patientSex]").val(data['patientSex'])
-                $("textarea[name=patientMemo]").val(data['patientMemo'])
+                $("input[name=docNo]").val(data['docNo'])
+                $("input[name=docName]").val(data['docName'])
+                $("input[name=docPass]").val(data['docPass'])
+                $("input[name=docPhone]").val(data['docPhone'])
+                if(data['docTitle'] === '开单人'){
+                    $("input[name='docTitle'][value='开单人']").attr("checked","checked");
+                    $("input[name='docTitle'][value='治疗师']").removeAttr("checked");
+                }else{
+                    $("input[name='docTitle'][value='开单人']").removeAttr("checked");
+                    $("input[name='docTitle'][value='治疗师']").attr("checked","checked");
+                }
+                form.render();
             },
             error:function () {
                 layer.msg("获取数据失败")
             }
         })
 
-
         //监听提交
         form.on('submit(saveBtn)', function (data) {
             var index = layer.alert("请确认是否提交", {
                 title: '提示'
             }, function () {
-
+                var postParam = data.field
+                // postParam['docTitle'] = $("input[name=docTitle][checked]").val();
                 $.ajax({
-                    url:'/patient/edit.do',
+                    url:'/doctor/edit.do',
                     type:'post',
                     dataType:'json',
                     contentType: 'application/json',
-                    data:JSON.stringify(data.field),
-                    timeout:2000,
+                    data:JSON.stringify(postParam),
+                    timeout:5000,
                     success:function(data){
                         console.log(data);
                         if(data.status == 'success'){
@@ -129,7 +125,6 @@
                             var iframeIndex = parent.layer.getFrameIndex(window.name);
                             parent.layer.close(iframeIndex);
                             parent.location.reload()
-
                         }else{
                             layer.msg("修改失败")
                         }
@@ -143,8 +138,7 @@
                 layer.close(index);
 
                 var iframeIndex = parent.layer.getFrameIndex(window.name);
-                // parent.layer.close(iframeIndex);
-                // parent.location.reload();
+                parent.layer.close(iframeIndex);
 
             });
 

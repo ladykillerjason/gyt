@@ -7,16 +7,15 @@ package org.gyt.controller;
 import org.gyt.service.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -26,17 +25,27 @@ public class DoctorController {
     @Autowired
     DoctorService doctorService;
 
-    @RequestMapping("/login")
-    public String login(String username, String password, Model model, HttpServletRequest request) {
-        if (doctorService.checkLogin(username, password)) {
-            model.addAttribute("msg", "登陆成功");
-            HttpSession httpSession = request.getSession();
-            httpSession.setAttribute("currentUserName", username);
-            return "main";
+    @RequestMapping(value = "/login", method=RequestMethod.POST)
+    public String login(String docNo, String docPass,HttpSession session) {
+        Map<String,String> map = new HashMap<String, String>();
+        if (doctorService.checkLogin(docNo, docPass)) {
+            map.put("msg", "登陆成功");
+            session.setAttribute("currentDocNo", docNo);
+            return "redirect:/page/main";
         } else {
-            model.addAttribute("msg", "登陆失败，请检查用户名密码");
-            return "login";
+            map.put("msg", "登陆失败，请检查用户名密码");
+            return "redirect:/page/login/login";
         }
+    }
+
+    @RequestMapping(value = "/logout", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+    @ResponseBody
+    public Map login(HttpSession session) {
+        Map<String,String> map = new HashMap<String, String>();
+        session.removeAttribute("currentDocNo");
+        session.invalidate();
+        map.put("msg", "退出登录成功");
+        return map;
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")

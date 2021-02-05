@@ -1,7 +1,4 @@
-<!--
-  ~ Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
-  -->
-
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <!DOCTYPE html>
 <html>
 <head>

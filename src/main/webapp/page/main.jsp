@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,11 +14,11 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
-    <link rel="icon" href="images/favicon.ico">
-    <link rel="stylesheet" href="lib/layui-v2.5.5/css/layui.css" media="all">
-    <link rel="stylesheet" href="css/layuimini.css?v=2.0.4.2" media="all">
-    <link rel="stylesheet" href="css/themes/default.css" media="all">
-    <link rel="stylesheet" href="lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="stylesheet" href="/lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/layuimini.css?v=2.0.4.2" media="all">
+    <link rel="stylesheet" href="/css/themes/default.css" media="all">
+    <link rel="stylesheet" href="/lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
     <!--[if lt IE 9]>
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
@@ -54,16 +55,16 @@
                 <li class="layui-nav-item" lay-unselect>
                     <a href="javascript:;" data-refresh="刷新"><i class="fa fa-refresh"></i></a>
                 </li>
-                <li class="layui-nav-item" lay-unselect>
-                    <a href="javascript:;" data-clear="清理" class="layuimini-clear"><i class="fa fa-trash-o"></i></a>
-                </li>
-                <li class="layui-nav-item mobile layui-hide-xs" lay-unselect>
-                    <a href="javascript:;" data-check-screen="full"><i class="fa fa-arrows-alt"></i></a>
-                </li>
+<%--                <li class="layui-nav-item" lay-unselect>--%>
+<%--                    <a href="javascript:;" data-clear="清理" class="layuimini-clear"><i class="fa fa-trash-o"></i></a>--%>
+<%--                </li>--%>
+<%--                <li class="layui-nav-item mobile layui-hide-xs" lay-unselect>--%>
+<%--                    <a href="javascript:;" data-check-screen="full"><i class="fa fa-arrows-alt"></i></a>--%>
+<%--                </li>--%>
 
-<%--                <li class="layui-nav-item layuimini-setting">--%>
-<%--                    <a href="javascript:;">admin</a>--%>
-<%--                    <dl class="layui-nav-child">--%>
+                <li class="layui-nav-item layuimini-setting">
+                    <a href="javascript:;">admin</a>
+                    <dl class="layui-nav-child">
 <%--                        <dd>--%>
 <%--                            <a href="javascript:;" layuimini-content-href="page/user-setting.html" data-title="基本资料" data-icon="fa fa-gears">基本资料<span class="layui-badge-dot"></span></a>--%>
 <%--                        </dd>--%>
@@ -73,14 +74,11 @@
 <%--                        <dd>--%>
 <%--                            <hr>--%>
 <%--                        </dd>--%>
-<%--                        <dd>--%>
-<%--                            <a href="javascript:;" class="login-out">退出登录</a>--%>
-<%--                        </dd>--%>
-<%--                    </dl>--%>
-<%--                </li>--%>
-<%--                <li class="layui-nav-item layuimini-select-bgcolor" lay-unselect>--%>
-<%--                    <a href="javascript:;" data-bgcolor="配色方案"><i class="fa fa-ellipsis-v"></i></a>--%>
-<%--                </li>--%>
+                        <dd>
+                            <a href="javascript:;" class="login-out">退出登录</a>
+                        </dd>
+                    </dl>
+                </li>
             </ul>
         </div>
     </div>
@@ -129,8 +127,8 @@
 
     </div>
 </div>
-<script src="lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
-<script src="js/lay-config.js?v=2.0.0" charset="utf-8"></script>
+<script src="/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script src="/js/lay-config.js?v=2.0.0" charset="utf-8"></script>
 <script>
     layui.use(['jquery', 'layer', 'miniAdmin','miniTongji'], function () {
         var $ = layui.jquery,
@@ -139,8 +137,8 @@
             miniTongji = layui.miniTongji;
 
         var options = {
-            iniUrl: "api/init.json",    // 初始化接口
-            clearUrl: "api/clear.json", // 缓存清理接口
+            iniUrl: "/api/init.json",    // 初始化接口
+            clearUrl: "/api/clear.json", // 缓存清理接口
             urlHashLocation: true,      // 是否打开hash定位
             bgColorDefault: false,      // 主题默认配置
             multiModule: true,          // 是否开启多模块
@@ -162,9 +160,26 @@
         });
 
         $('.login-out').on("click", function () {
-            layer.msg('退出登录成功', function () {
-                window.location = 'page/login-3.html';
-            });
+
+            layui.$.ajax({
+                url:'/doctor/logout.do',
+                type:'post',
+                dataType:'json',
+                contentType: 'application/json',
+                data:JSON.stringify({}),
+                timeout:2000,
+                success:function(res){
+                    if(res.msg === "退出登录成功"){
+                        window.location = '/page/login/login';
+                    }else{
+                        layer.msg("退出登录失败")
+                    }
+                },
+                error:function () {
+                    layer.msg("退出登录失败")
+                }
+            })
+
         });
     });
 </script>

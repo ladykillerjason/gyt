@@ -1,11 +1,11 @@
 {
   "homeInfo": {
     "title": "首页",
-    "href": "page/welcome.html"
+    "href": "/page/welcome"
   },
   "logoInfo": {
     "title": "",
-    "image": "images/logo.jpg",
+    "image": "/images/logo.jpg",
     "href": ""
   },
   "menuInfo": [
@@ -23,25 +23,25 @@
           "child": [
             {
               "title": "开治疗单",
-              "href": "page/treatBill/add-treatBill.html",
+              "href": "/page/treatBill/add-treatBill",
               "icon": "fa fa-pencil",
               "target": "_self"
             },
             {
               "title": "入队列",
-              "href": "page/patientQueue/add-patientQueue.html",
+              "href": "/page/patientQueue/add-patientQueue",
               "icon": "fa fa-plus-circle",
               "target": "_self"
             },
             {
               "title": "查看队列",
-              "href": "page/patientQueue/show-queue.html",
+              "href": "/page/patientQueue/show-queue",
               "icon": "fa fa-eye",
               "target": "_self"
             },
             {
               "title": "结束治疗",
-              "href": "page/patientQueue/finishTreat.html",
+              "href": "/page/patientQueue/finishTreat",
               "icon": "fa fa-check",
               "target": "_self"
             }
@@ -56,31 +56,31 @@
           "child": [
             {
               "title": "统计开单人",
-              "href": "page/stat/statKaiDanRen.html",
+              "href": "/page/stat/statKaiDanRen",
               "icon": "fa fa-bar-chart",
               "target": "_self"
             },
             {
               "title": "统计治疗师",
-              "href": "page/stat/statZhiLiaoShi.html",
+              "href": "/page/stat/statZhiLiaoShi",
               "icon": "fa fa-bar-chart",
               "target": "_self"
             },
             {
               "title": "统计病人",
-              "href": "page/stat/statPatient.html",
+              "href": "/page/stat/statPatient",
               "icon": "fa fa-bar-chart",
               "target": "_self"
             },
             {
               "title": "统计金额-开单人",
-              "href": "page/stat/statKaiDanRen-money.html",
+              "href": "/page/stat/statKaiDanRen-money",
               "icon": "fa fa-cny",
               "target": "_self"
             },
             {
               "title": "统计金额-治疗师",
-              "href": "page/stat/statZhiLiaoShi-money.html",
+              "href": "/page/stat/statZhiLiaoShi-money",
               "icon": "fa fa-cny",
               "target": "_self"
             }
@@ -95,19 +95,19 @@
           "child": [
             {
               "title": "医生信息维护",
-              "href": "page/doctor/table-doctor.html",
+              "href": "/page/doctor/table-doctor",
               "icon": "fa fa-list-alt",
               "target": "_self"
             },
             {
               "title": "病人信息维护",
-              "href": "page/patient/table-patient.html",
+              "href": "/page/patient/table-patient",
               "icon": "fa fa-list-alt",
               "target": "_self"
             },
             {
               "title": "项目信息维护",
-              "href": "page/project/table-project.html",
+              "href": "/page/project/table-project",
               "icon": "fa fa-list-alt",
               "target": "_self"
             }

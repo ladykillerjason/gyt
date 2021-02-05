@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,6 +19,14 @@
             <div style="margin: 10px 10px 10px 10px">
                 <form class="layui-form layui-form-pane" action="">
                     <div class="layui-form-item">
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">治疗单号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="treatBillNo" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
                         <div class="layui-inline">
                             <label class="layui-form-label">病人编号</label>
                             <div class="layui-input-inline">
@@ -41,7 +50,7 @@
         <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
 
         <script type="text/html" id="currentTableBar">
-            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="addToQueue">排队</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="finishTreat">结束治疗</a>
         </script>
 
     </div>
@@ -74,14 +83,16 @@
                 };
             },
             cols: [[
-                {type: 'radio'}
+                // {type: 'radio'}
+                {field: 'id', width: 200, title: '治疗单ID',hide:true}
                 , {field: 'treatBillNo', width: 200, title: '治疗单编号'}
                 , {field: 'patientName', width: 200, title: '病人姓名'}
                 , {field: 'projectName', width: 200, title: '项目名称'}
                 , {field: 'treatTotalCount', width: 200, title: '总治疗次数'}
                 , {field: 'treatUseCount', title: '已用治疗次数', width: 200}
-                , {field: 'createTime', title: '开单时间', width: 200}
-                , {title: '操作', minWidth: 200, toolbar: '#currentTableBar', align: "center"}
+                , {field: 'createTime', title: '开单时间', width: 300}
+                , {field: 'zhiliaoNo', title: '治疗师编号(手动输入)', width: 200,edit: 'text',style:'background-color: #5FB878; color: #fff;'}
+                , {title: '操作', minWidth: 100, toolbar: '#currentTableBar', align: "center"}
             ]],
             limits: [10, 15, 20, 25, 50, 100],
             limit: 15,
@@ -98,7 +109,9 @@
                 page: {
                     curr: 1
                 }
-                , where:{'patientNo':$("input[name='patientNo']").val(),
+                , where:{
+                    'treatBillNo':$("input[name='treatBillNo']").val(),
+                    'patientNo':$("input[name='patientNo']").val(),
                     'patientName':$("input[name='patientName']").val()
                 },
             }, 'data');
@@ -106,45 +119,20 @@
             return false;
         });
 
-        /**
-         * toolbar监听事件
-         */
-        table.on('toolbar(currentTableFilter)', function (obj) {
-            if (obj.event === 'add') {  // 监听添加操作
-                var index = layer.open({
-                    title: '添加病人信息',
-                    type: 2,
-                    shade: 0.2,
-                    maxmin:true,
-                    shadeClose: true,
-                    area: ['80%', '80%'],
-                    content: './add-patient.html',
-                });
-                $(window).on("resize", function () {
-                    layer.full(index);
-                });
-            } else if (obj.event === 'delete') {  // 监听删除操作
-                var checkStatus = table.checkStatus('currentTableId')
-                    , data = checkStatus.data;
-                layer.alert(JSON.stringify(data));
-            }
-        });
-
-        //监听表格复选框选择
-        table.on('checkbox(currentTableFilter)', function (obj) {
-            console.log(obj)
-        });
 
         table.on('tool(currentTableFilter)', function (obj) {
             var data = obj.data;
-            if (obj.event === 'addToQueue') {
+            if (obj.event === 'finishTreat') {
                 console.log(data);
                 var tm = {};
                 tm['patientNo'] = data['patientNo'];
                 tm['treatBillNo'] = data['treatBillNo'];
+                tm['treatBillId'] = data['treatBillId'];
                 tm['projectNo'] = data['projectNo'];
+                tm['zhiliaoNo'] = data['zhiliaoNo'];
+                tm['treatCount'] = data['treatUseCount']+1;  // 前者第几次治疗， 后者已经治疗了几次
                 layui.$.ajax({
-                    url:'/patientQueue/add.do',
+                    url:'/treatLog/add.do',
                     type:'post',
                     dataType:'json',
                     contentType: 'application/json',
@@ -152,20 +140,20 @@
                     timeout:2000,
                     success:function(res){
                         if(res.status == 'success'){
-                            layer.msg("添加排队信息成功");
+                            layer.msg("操作成功");
                             setTimeout( function(){
                                 var iframeIndex = parent.layer.getFrameIndex(window.name);
                                 parent.layer.close(iframeIndex);
-                                window.location.reload();
+                                parent.location.reload();
                             }, 1 * 1000 );
 
                         }else{
-                            layer.msg("添加排队信息失败")
+                            layer.msg("操作失败")
                         }
 
                     },
                     error:function () {
-                        layer.msg("添加排队信息失败")
+                        layer.msg("操作失败")
                     }
                 })
 

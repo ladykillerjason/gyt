@@ -6,7 +6,6 @@ package org.gyt.service;
 
 import org.apache.commons.lang.StringUtils;
 import org.gyt.dao.DoctorDao;
-import org.gyt.util.ShaUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +21,9 @@ public class DoctorService {
 
     public boolean checkLogin(String name, String password) {
         Map<String, Object> map = new HashMap();
-        map.put("name", name);
-        map.put("password", ShaUtil.shaEncode(password));
+        map.put("doc_no", name);
+        // map.put("password", ShaUtil.shaEncode(password));
+        map.put("doc_pass", password);
         List<Map> retList = dao.findDoctors(map);
         if (retList.size() == 0) {
             return false;
