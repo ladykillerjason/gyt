@@ -31,6 +31,10 @@ public class PageController {
     public String login() {
         return "/login/login";
     }
+    @RequestMapping("/login/changePass")
+    public String changePass() {
+        return "/login/changePass";
+    }
 
     @RequestMapping("/patient/add-patient")
     public String addPatient() {

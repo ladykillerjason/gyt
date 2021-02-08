@@ -1,0 +1,92 @@
+{
+  "homeInfo": {
+    "title": "首页",
+    "href": "/page/welcome"
+  },
+  "logoInfo": {
+    "title": "",
+    "image": "/images/logo.jpg",
+    "href": ""
+  },
+  "menuInfo": [
+    {
+      "title": "国医堂",
+      "icon": "fa fa-address-book",
+      "href": "",
+      "target": "_self",
+      "child": [
+        {
+          "title": "排队业务",
+          "href": "",
+          "icon": "fa fa-users",
+          "target": "_self",
+          "child": [
+            {
+              "title": "开治疗单",
+              "href": "/page/treatBill/add-treatBill",
+              "icon": "fa fa-pencil",
+              "target": "_self"
+            },
+            {
+              "title": "入队列",
+              "href": "/page/patientQueue/add-patientQueue",
+              "icon": "fa fa-plus-circle",
+              "target": "_self"
+            },
+            {
+              "title": "查看队列",
+              "href": "/page/patientQueue/show-queue",
+              "icon": "fa fa-eye",
+              "target": "_self"
+            },
+            {
+              "title": "结束治疗",
+              "href": "/page/patientQueue/finishTreat",
+              "icon": "fa fa-check",
+              "target": "_self"
+            }
+          ]
+        },
+
+        {
+          "title": "统计",
+          "href": "",
+          "icon": "fa fa-bar-chart",
+          "target": "_self",
+          "child": [
+            {
+              "title": "统计开单人",
+              "href": "/page/stat/statKaiDanRen",
+              "icon": "fa fa-bar-chart",
+              "target": "_self"
+            },
+            {
+              "title": "统计治疗师",
+              "href": "/page/stat/statZhiLiaoShi",
+              "icon": "fa fa-bar-chart",
+              "target": "_self"
+            },
+            {
+              "title": "统计病人",
+              "href": "/page/stat/statPatient",
+              "icon": "fa fa-bar-chart",
+              "target": "_self"
+            },
+            {
+              "title": "统计金额-开单人",
+              "href": "/page/stat/statKaiDanRen-money",
+              "icon": "fa fa-cny",
+              "target": "_self"
+            },
+            {
+              "title": "统计金额-治疗师",
+              "href": "/page/stat/statZhiLiaoShi-money",
+              "icon": "fa fa-cny",
+              "target": "_self"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

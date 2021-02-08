@@ -63,17 +63,14 @@
 <%--                </li>--%>
 
                 <li class="layui-nav-item layuimini-setting">
-                    <a href="javascript:;"><%=session.getAttribute("currentDocNo")%></a>
+                    <a href="javascript:;"><span id="currentDocNo"><%=session.getAttribute("currentDocNo")%></span></a>
                     <dl class="layui-nav-child">
-<%--                        <dd>--%>
-<%--                            <a href="javascript:;" layuimini-content-href="page/user-setting.html" data-title="基本资料" data-icon="fa fa-gears">基本资料<span class="layui-badge-dot"></span></a>--%>
-<%--                        </dd>--%>
-<%--                        <dd>--%>
-<%--                            <a href="javascript:;" layuimini-content-href="page/user-password.html" data-title="修改密码" data-icon="fa fa-gears">修改密码</a>--%>
-<%--                        </dd>--%>
-<%--                        <dd>--%>
-<%--                            <hr>--%>
-<%--                        </dd>--%>
+                        <dd>
+                            <a id="changePass" href="javascript:;" data-title="修改密码" data-icon="fa fa-gears">修改密码</a>
+                        </dd>
+                        <dd>
+                            <hr>
+                        </dd>
                         <dd>
                             <a href="javascript:;" class="login-out">退出登录</a>
                         </dd>
@@ -136,8 +133,20 @@
             miniAdmin = layui.miniAdmin,
             miniTongji = layui.miniTongji;
 
+        var myInitUrl = "";
+        <%
+            if(session.getAttribute("currentDocNo").toString().equals("admin")){
+        %>
+            myInitUrl = "/api/init.json";
+        <%
+            }else{
+        %>
+            myInitUrl = "/api/init1.json";
+        <%
+            }
+        %>
         var options = {
-            iniUrl: "/api/init.json",    // 初始化接口
+            iniUrl: myInitUrl,    // 初始化接口
             clearUrl: "/api/clear.json", // 缓存清理接口
             urlHashLocation: true,      // 是否打开hash定位
             bgColorDefault: false,      // 主题默认配置
@@ -179,8 +188,25 @@
                     layer.msg("退出登录失败")
                 }
             })
-
         });
+
+        $('#changePass').on("click", function () {
+
+            var currentDocNo = $("#currentDocNo").text();
+            var index = layer.open({
+                title: '修改密码',
+                type: 2,
+                shade: 0.2,
+                maxmin:true,
+                shadeClose: true,
+                area: ['80%', '80%'],
+                content: '/page/login/changePass?docNo='+currentDocNo,
+            });
+            $(window).on("resize", function () {
+                layer.full(index);
+            });
+        });
+
     });
 </script>
 </body>
