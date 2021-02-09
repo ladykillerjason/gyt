@@ -6,6 +6,7 @@ package org.gyt.service;
 
 import org.apache.commons.lang.StringUtils;
 import org.gyt.dao.PatientDao;
+import org.gyt.dao.PatientQueueDao;
 import org.gyt.dao.TreatBillDao;
 import org.gyt.util.TimeFormat;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,10 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 public class TreatBillService {
@@ -25,6 +28,9 @@ public class TreatBillService {
 
     @Autowired
     PatientDao patientDao;
+
+    @Autowired
+    PatientQueueDao patientQueueDao;
 
     public List<Map> findTreatBills(Map<String, String> param) {
         String treatBillNo = param.get("treatBillNo");
@@ -79,6 +85,46 @@ public class TreatBillService {
         return treatBillDao.findTreatBills(map);
     }
 
+    public List<Map> findTreatBillsNotInQueue(Map<String, String> param) {
+        List<Map> ret = new ArrayList<>();
+        List<Map> allTreatBills = findTreatBills(param);
+        List<Map> queue = patientQueueDao.findPatientQueue(new HashMap<>());
+        if (queue.size() == 0) {
+            return allTreatBills;
+        }
+        Set set = new HashSet<String>();
+        for (Map<String, String> m : queue) {
+            set.add(m.get("treatBillNo") + m.get("projectNo"));
+        }
+        for (Map<String, String> tbMap : allTreatBills) {
+            String tmp = tbMap.get("treatBillNo") + tbMap.get("projectNo");
+            if (!set.contains(tmp)) {
+                ret.add(tbMap);
+            }
+        }
+        return ret;
+    }
+    public List<Map> findTreatBillsInQueue(Map<String, String> param) {
+        List<Map> ret = new ArrayList<>();
+        List<Map> allTreatBills = findTreatBills(param);
+        List<Map> queue = patientQueueDao.findPatientQueue(new HashMap<>());
+        if (queue.size() == 0) {
+            return allTreatBills;
+        }
+        Set set = new HashSet<String>();
+        for (Map<String, String> m : queue) {
+            set.add(m.get("treatBillNo") + m.get("projectNo"));
+        }
+        for (Map<String, String> tbMap : allTreatBills) {
+            String tmp = tbMap.get("treatBillNo") + tbMap.get("projectNo");
+            if (set.contains(tmp)) {
+                ret.add(tbMap);
+            }
+        }
+        return ret;
+    }
+
+
     public void checkHasPatient(String patientNo, String patientName) {
         Map<String, Object> map = new HashMap<>();
         map.put("patient_no", patientNo);
@@ -107,7 +153,7 @@ public class TreatBillService {
         for (Map<String, Object> t_map : projects) {
 
             Map<String, Object> map = new HashMap<String, Object>();
-            map.put("tb_no",treatBillNo);
+            map.put("tb_no", treatBillNo);
             map.put("kaidan_no", kaidanNo);
             map.put("patient_no", patientNo);
 

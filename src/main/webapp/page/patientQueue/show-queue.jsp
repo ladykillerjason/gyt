@@ -39,11 +39,11 @@
             </div>
         </fieldset>
 
-        <script type="text/html" id="toolbarDemo">
-            <div class="layui-btn-container">
-                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
-            </div>
-        </script>
+<%--        <script type="text/html" id="toolbarDemo">--%>
+<%--            <div class="layui-btn-container">--%>
+<%--                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>--%>
+<%--            </div>--%>
+<%--        </script>--%>
 
         <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
 
@@ -155,14 +155,14 @@
                     maxmin:true,
                     shadeClose: true,
                     area: ['80%', '80%'],
-                    content: './query-treatBill.jsp?treatBillNo='+data['treatBillNo'],
+                    content: './query-treatBill?treatBillNo='+data['treatBillNo'],
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
                 });
                 return false;
             } else if (obj.event === 'delete') {
-                layer.confirm('真的删除行么', function (index) {
+                layer.confirm('真的删除么', function (index) {
                     console.log(obj.data);
                     var tm = {};
                     tm['patientNo'] = obj.data['patientNo'];

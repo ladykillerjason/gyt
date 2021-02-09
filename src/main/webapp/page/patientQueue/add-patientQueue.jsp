@@ -56,7 +56,7 @@
 
         table.render({
             elem: '#currentTableId',
-            url: '/treatBill/list.do',
+            url: '/treatBill/listNotInQueue.do',
             method: 'post',
             where:{'isOver':'否'},
             contentType: 'application/json;charset=UTF-8',
@@ -75,7 +75,7 @@
                 };
             },
             cols: [[
-                {type: 'radio'}
+                // {type: 'radio'}
                 , {field: 'treatBillNo', width: 200, title: '治疗单编号'}
                 , {field: 'patientName', width: 200, title: '病人姓名'}
                 , {field: 'projectName', width: 200, title: '项目名称'}
@@ -139,41 +139,52 @@
         table.on('tool(currentTableFilter)', function (obj) {
             var data = obj.data;
             if (obj.event === 'addToQueue') {
-                console.log(data);
-                var tm = {};
-                tm['patientNo'] = data['patientNo'];
-                tm['treatBillNo'] = data['treatBillNo'];
-                tm['projectNo'] = data['projectNo'];
-                layui.$.ajax({
-                    url:'/patientQueue/add.do',
-                    type:'post',
-                    dataType:'json',
-                    contentType: 'application/json',
-                    data:JSON.stringify(tm),
-                    timeout:2000,
-                    success:function(res){
-                        if(res.status == 'success'){
-                            layer.msg("添加排队信息成功");
-                            setTimeout( function(){
-                                var iframeIndex = parent.layer.getFrameIndex(window.name);
-                                parent.layer.close(iframeIndex);
-                                window.location.reload();
-                            }, 1 * 1000 );
+                var index = layer.alert("确定入队列吗", {
+                    title: '提示'
+                }, function () {
+                    console.log(data);
+                    var tm = {};
+                    tm['patientNo'] = data['patientNo'];
+                    tm['treatBillNo'] = data['treatBillNo'];
+                    tm['projectNo'] = data['projectNo'];
+                    layui.$.ajax({
+                        url:'/patientQueue/add.do',
+                        type:'post',
+                        dataType:'json',
+                        contentType: 'application/json',
+                        data:JSON.stringify(tm),
+                        timeout:2000,
+                        success:function(res){
+                            if(res.status == 'success'){
+                                layer.msg("添加排队信息成功");
+                                setTimeout( function(){
+                                    var iframeIndex = parent.layer.getFrameIndex(window.name);
+                                    parent.layer.close(iframeIndex);
+                                    window.location.reload();
+                                }, 1 * 1000 );
 
-                        }else{
+                            }else{
+                                layer.msg("添加排队信息失败")
+                            }
+
+                        },
+                        error:function () {
                             layer.msg("添加排队信息失败")
                         }
+                    })
 
-                    },
-                    error:function () {
-                        layer.msg("添加排队信息失败")
-                    }
-                })
+                    $(window).on("resize", function () {
+                        layer.full(index);
+                    });
+                    return false;
+                    // 关闭弹出层
+                    layer.close(index);
 
-                $(window).on("resize", function () {
-                    layer.full(index);
+                    var iframeIndex = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(iframeIndex);
+
                 });
-                return false;
+
             } else if (obj.event === 'delete') {
                 layer.confirm('真的删除行么', function (index) {
                     obj.del();

@@ -83,7 +83,7 @@ public class TreatLogService {
         Map<String, String> ret = new HashMap<>();
         ret.put("status", "fail");
         ret.put("msg", "新增失败");
-        String treatBillId = (String) param.get("treatBillId");
+        Integer treatBillId = (Integer) param.get("treatBillId");
         String treatBillNo = (String) param.get("treatBillNo");
         String patientNo = (String) param.get("patientNo");
         String projectNo = (String) param.get("projectNo");

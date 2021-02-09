@@ -29,6 +29,19 @@ public class TreatBillController {
         return ret;
     }
 
+    @RequestMapping(value = "/listNotInQueue", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+    @ResponseBody
+    public List<Map> getAllTreatBillsNotInQueue(@RequestBody Map<String, String> param) {
+        List<Map> ret = treatBillService.findTreatBillsNotInQueue(param);
+        return ret;
+    }
+    @RequestMapping(value = "/listInQueue", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+    @ResponseBody
+    public List<Map> getAllTreatBillsInQueue(@RequestBody Map<String, String> param) {
+        List<Map> ret = treatBillService.findTreatBillsInQueue(param);
+        return ret;
+    }
+
     @RequestMapping(value = "/add", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     @ResponseBody
     public Map addTreatBill(@RequestBody Map<String, Object> param) {

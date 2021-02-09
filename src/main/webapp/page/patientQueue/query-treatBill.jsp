@@ -61,8 +61,8 @@
                 , {field: 'treatBillNo', width: 200, title: '治疗单编号'}
                 , {field: 'patientName', width: 200, title: '病人姓名'}
                 , {field: 'projectName', width: 200, title: '项目名称'}
-                , {field: 'treatTotalCount', width: 100, title: '总治疗次数'}
-                , {field: 'treatUseCount', title: '已用治疗次数', width: 100}
+                , {field: 'treatTotalCount', width: 200, title: '总治疗次数'}
+                , {field: 'treatUseCount', title: '已用治疗次数', width: 200}
                 , {field: 'createTime', title: '开单时间', width: 200}
             ]]
             , parseData: function (res) { //res 即为原始返回的数据
