@@ -11,7 +11,7 @@
  Target Server Version : 50547
  File Encoding         : 65001
 
- Date: 30/12/2020 17:15:50
+ Date: 10/02/2021 17:53:57
 */
 
 SET NAMES utf8mb4;
@@ -82,7 +82,7 @@ CREATE TABLE `t_treat_bill`  (
   `is_over` varchar(1) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '是否结束(冗余)',
   `over_time` datetime NULL DEFAULT NULL COMMENT '结束时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 10 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for t_treat_log
@@ -95,6 +95,17 @@ CREATE TABLE `t_treat_log`  (
   `treat_count` int(11) NULL DEFAULT NULL COMMENT '第几次治疗',
   `treat_time` datetime NULL DEFAULT NULL COMMENT '治疗时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = Fixed;
+) ENGINE = MyISAM AUTO_INCREMENT = 20 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = Fixed;
+
+-- ----------------------------
+-- Table structure for t_upload_pic
+-- ----------------------------
+DROP TABLE IF EXISTS `t_upload_pic`;
+CREATE TABLE `t_upload_pic`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `tl_id` int(11) NOT NULL COMMENT '治疗记录ID',
+  `pic_path` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT '图片保存目录',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = MyISAM AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;
