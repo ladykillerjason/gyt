@@ -123,18 +123,19 @@ public class TreatLogService {
         }
     }
 
-    public Integer getTreatLogId(String treatBillNo, String zhiliaoNo) {
+    public Integer getTreatLogId(Integer treatBillId, String zhiliaoNo, Integer treatCount) {
         Map<String, Object> map = new HashMap<>();
-        map.put("tb_id", treatBillNo);
+        map.put("tb_id", treatBillId);
         map.put("zhiliao_no", zhiliaoNo);
+        map.put("treat_count", treatCount);
         List<Map> ret = treatLogDao.findTreatLogsPure(map);
         return (Integer) ret.get(0).get("id");
-
     }
 
     public Map<String, String> uploadPic(HttpServletRequest request) {
-        String treatBillNo = request.getParameter("treatBillNo");
+        Integer treatBillId = Integer.valueOf(request.getParameter("treatBillId"));
         String zhiliaoNo = request.getParameter("zhiliaoNo");
+        Integer treatCount = Integer.valueOf(request.getParameter("treatCount"));
         Map<String, String> ret = new HashMap<>();
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(
             request.getSession().getServletContext());
@@ -142,9 +143,12 @@ public class TreatLogService {
         if (multipartResolver.isMultipart(request)) {
             MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
             Iterator<String> iter = multiRequest.getFileNames();
+            int count = 0;
             while (iter.hasNext()) {
+                count += 1;
                 MultipartFile file = multiRequest.getFile(iter.next());
-                String myFileName = file.getOriginalFilename();
+                String subfix = file.getOriginalFilename().substring(file.getOriginalFilename().indexOf("."));
+                String myFileName = String.valueOf(System.currentTimeMillis())+"-"+String.valueOf(count)+subfix;
                 String fullFileName = rootPath + myFileName;
                 File fullPathFile = new File(fullFileName);
                 System.out.println(myFileName);
@@ -152,12 +156,12 @@ public class TreatLogService {
                     // 保存文件到本地
                     file.transferTo(fullPathFile);
                     // 保存文件路径到数据库
-                    Integer treatLogId = getTreatLogId(treatBillNo, zhiliaoNo);
+                    Integer treatLogId = getTreatLogId(treatBillId, zhiliaoNo,treatCount);
                     Map<String, Object> tm = new HashMap<>();
                     tm.put("tl_id", treatLogId);
                     tm.put("pic_path", fullFileName);
-                    ret.put("msg", "上传成功");
                     treatLogDao.insertUploadPic(tm);
+                    ret.put("msg", "上传成功");
                 } catch (IOException e) {
                     ret.put("msg", "上传失败");
                     e.printStackTrace();

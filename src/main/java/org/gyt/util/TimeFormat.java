@@ -26,6 +26,10 @@ public class TimeFormat {
     }
 
     public static void main(String[] args) {
-        System.out.println(timeFormat2(new Date()));
+        // System.out.println(timeFormat2(new Date()));
+        String name = "ss.png";
+        String subfix = name.substring(name.indexOf("."));
+        System.out.println(subfix);
     }
+
 }

@@ -45,6 +45,9 @@ public interface TreatLogDao {
         + "<if test=\"zhiliao_no !=null and zhiliao_no!='' \">"
         + "and zhiliao_no = #{zhiliao_no} "
         + "</if>"
+        + "<if test=\"treat_count !=null and treat_count!='' \">"
+        + "and treat_count = #{treat_count} "
+        + "</if>"
         + "</script>")
     public List<Map> findTreatLogsPure(Map<String, Object> map);
 
@@ -60,9 +63,9 @@ public interface TreatLogDao {
     @Insert("<script>"
         + "insert into "
         + "t_upload_pic(tl_id,pic_path) "
-        + "values(#{tl_id},#{pic_path})"
+        + "values (#{tl_id},#{pic_path})"
         + "</script>")
-    public int insertUploadPic(Map map);
+    public int insertUploadPic(Map<String, Object> map);
 
     @Select("<script>"
         + "select tl_id treatBillId, pic_path picPath"

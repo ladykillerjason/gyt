@@ -42,10 +42,10 @@
     </tx:advice>
 
     <!-- 配置事务切面 -->
-    <aop:config>
-        <aop:pointcut id="serviceOperation"
-                      expression="(execution(* org.gyt.service.*.*(..)))"/>
-        <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceOperation"/>
-    </aop:config>
+<!--    <aop:config>-->
+<!--        <aop:pointcut id="serviceOperation"-->
+<!--                      expression="(execution(* org.gyt.service.*.*(..)))"/>-->
+<!--        <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceOperation"/>-->
+<!--    </aop:config>-->
 
 </beans>

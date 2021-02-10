@@ -11,20 +11,11 @@
 <body>
 
 <div class="layui-form layuimini-form">
-    <div class="layui-form-item">
-        <label class="layui-form-label required">治疗单号</label>
-        <div class="layui-input-block">
-            <input disabled type="text" name="treatBillNo" lay-verify="required" lay-reqtext="治疗编号不能为空"  value="" class="layui-input">
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label required">治疗师编号</label>
-        <div class="layui-input-block">
-            <input disabled type="text" name="docNo" lay-verify="required" lay-reqtext="治疗师编号不能为空"  value="" class="layui-input">
-        </div>
+    <div style="vertical-align: middle;text-align: center;font-size: 24px;">
+        请上传此次治疗的图片
     </div>
 
-    <div id="zyupload" class="zyupload"></div>
+    <div style="margin-top: 60px;" id="zyupload" class="zyupload"></div>
 
 <%--    <div class="layui-form-item">--%>
 <%--        <button type="button" class="layui-btn" id="test2">多图片上传</button>--%>
@@ -42,21 +33,31 @@
 <script src="/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
 <script src="/lib/jq-module/zyupload/zyupload-1.0.0.min.js" charset="utf-8"></script>
 <script type="text/javascript">
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+        if (r != null) return unescape(r[2]);
+        return null; //返回参数值
+    }
 
     $(function () {
+
+        var treatBillId = getUrlParam('treatBillId');
+        var zhiliaoNo = getUrlParam('zhiliaoNo');
+        var treatCount = getUrlParam('treatCount');
         // 初始化插件
         $("#zyupload").zyUpload({
             width: "650px",                 // 宽度
             height: "400px",                 // 宽度
             itemWidth: "140px",                 // 文件项的宽度
             itemHeight: "115px",                 // 文件项的高度
-            url: "/treatLog/upload",  // 上传文件的路径
+            url: "/treatLog/upload?treatBillId="+treatBillId+"&zhiliaoNo="+zhiliaoNo+"&treatCount="+treatCount,  // 上传文件的路径
             fileType: ["jpg", "png", "jpeg", "gif"],// 上传文件的类型
             fileSize: 51200000,                // 上传文件的大小
             multiple: true,                    // 是否可以多个文件上传
             dragDrop: true,                    // 是否可以拖动上传文件
             tailor: false,                    // 是否可以裁剪图片
-            del: false,                    // 是否可以删除文件
+            del: true,                    // 是否可以删除文件
             finishDel: false,  				  // 是否在上传文件完成后删除预览
             /* 外部获得的回调接口 */
             onSelect: function (selectFiles, allFiles) {    // 选择文件的回调方法  selectFile:当前选中的文件  allFiles:还没上传的全部文件
