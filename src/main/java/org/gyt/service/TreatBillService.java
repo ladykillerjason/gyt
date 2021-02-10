@@ -108,9 +108,6 @@ public class TreatBillService {
         List<Map> ret = new ArrayList<>();
         List<Map> allTreatBills = findTreatBills(param);
         List<Map> queue = patientQueueDao.findPatientQueue(new HashMap<>());
-        if (queue.size() == 0) {
-            return allTreatBills;
-        }
         Set set = new HashSet<String>();
         for (Map<String, String> m : queue) {
             set.add(m.get("treatBillNo") + m.get("projectNo"));

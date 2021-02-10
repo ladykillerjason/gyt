@@ -128,6 +128,11 @@
         table.on('tool(currentTableFilter)', function (obj) {
             var data = obj.data;
             if (obj.event === 'finishTreat') {
+                var zhiliaoNo = $("input[name='zhiliaoNo']").val().trim();
+                if(zhiliaoNo===""){
+                    layer.msg("请输入治疗师编号！");
+                    return
+                }
                 var index = layer.alert("确认结束治疗", {
                     title: '提示'
                 }, function () {
@@ -137,7 +142,7 @@
                     tm['treatBillNo'] = data['treatBillNo'];
                     tm['treatBillId'] = data['treatBillId'];
                     tm['projectNo'] = data['projectNo'];
-                    tm['zhiliaoNo'] = $("input[name='zhiliaoNo']").val().trim();
+                    tm['zhiliaoNo'] = zhiliaoNo;
                     tm['treatCount'] = data['treatUseCount']+1;  // 前者第几次治疗， 后者已经治疗了几次
                     layui.$.ajax({
                         url:'/treatLog/add.do',
