@@ -127,7 +127,7 @@
                     maxmin:true,
                     shadeClose: true,
                     area: ['80%', '80%'],
-                    content: '../page/table/add-patient.jsp',
+                    content: './add-project.jsp',
                 });
                 $(window).on("resize", function () {
                     layer.full(index);

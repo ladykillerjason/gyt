@@ -21,7 +21,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label required">编号</label>
         <div class="layui-input-block">
-            <input type="text" name="docNo" lay-verify="required" lay-reqtext="编号不能为空" placeholder="请输入编号" value="" class="layui-input">
+            <input disabled type="text" name="docNo" lay-verify="required" lay-reqtext="编号不能为空" placeholder="请输入编号" value="" class="layui-input">
 <!--            <tip>填写自己管理账号的名称。</tip>-->
         </div>
     </div>

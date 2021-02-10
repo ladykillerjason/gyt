@@ -21,7 +21,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label required">病人编号</label>
         <div class="layui-input-block">
-            <input type="text" name="patientNo" lay-verify="required" lay-reqtext="病人编号不能为空" placeholder="请输入病人编号" value="" class="layui-input">
+            <input disabled type="text" name="patientNo" lay-verify="required" lay-reqtext="病人编号不能为空" placeholder="请输入病人编号" value="" class="layui-input">
             <tip>填写病人编号。</tip>
         </div>
     </div>

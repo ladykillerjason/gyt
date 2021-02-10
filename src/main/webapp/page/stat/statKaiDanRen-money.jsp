@@ -80,8 +80,8 @@
             cols: [[
                 // {type: "checkbox", width: 50},
                 // {field: 'id', width: 200, title: 'ID', sort: true,hide:true},
-                {field: 'kaidanName', width: 300, title: '开单人姓名'},
-                {field: 'totalSum', width: 500, title: '总收益'},
+                {field: 'kaidanName', width: 500, title: '开单人姓名'},
+                {field: 'totalSum', width: 1000, title: '总收益'},
             ]],
             // limits: [10, 15, 20, 25, 50, 100],
             // limit: 15,
