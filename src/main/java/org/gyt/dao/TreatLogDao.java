@@ -57,4 +57,20 @@ public interface TreatLogDao {
     public int insertTreatLog(Map<String, Object> map);
 
 
+    @Insert("<script>"
+        + "insert into "
+        + "t_upload_pic(tl_id,pic_path) "
+        + "values(#{tl_id},#{pic_path})"
+        + "</script>")
+    public int insertUploadPic(Map map);
+
+    @Select("<script>"
+        + "select tl_id treatBillId, pic_path picPath"
+        + "from t_upload_pic "
+        + "where 1=1 "
+        + "<if test=\"id !=null and id!='' \">"
+        + "and id = #{id} "
+        + "</if>"
+        + "</script>")
+    public List<Map> findUploadPics(Map<String, Object> map);
 }

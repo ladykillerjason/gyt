@@ -11,11 +11,19 @@ import org.gyt.dao.TreatLogDao;
 import org.gyt.util.TimeFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Service
 public class TreatLogService {
@@ -70,7 +78,7 @@ public class TreatLogService {
         return treatBillDao.updateTreatBill(tMap);
     }
 
-    public int deletePatientQueue(String patientNo,String treatBillNo,String projectNo){
+    public int deletePatientQueue(String patientNo, String treatBillNo, String projectNo) {
         Map<String, String> map = new HashMap<>();
         map.put("patient_no", patientNo);
         map.put("tb_no", treatBillNo);
@@ -87,7 +95,7 @@ public class TreatLogService {
         String treatBillNo = (String) param.get("treatBillNo");
         String patientNo = (String) param.get("patientNo");
         String projectNo = (String) param.get("projectNo");
-        deletePatientQueue(patientNo,treatBillNo,projectNo);
+        deletePatientQueue(patientNo, treatBillNo, projectNo);
 
         String zhiliaoNo = (String) param.get("zhiliaoNo");
         Integer treatCount = (Integer) param.get("treatCount");
@@ -115,4 +123,47 @@ public class TreatLogService {
         }
     }
 
+    public Integer getTreatLogId(String treatBillNo, String zhiliaoNo) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("tb_id", treatBillNo);
+        map.put("zhiliao_no", zhiliaoNo);
+        List<Map> ret = treatLogDao.findTreatLogsPure(map);
+        return (Integer) ret.get(0).get("id");
+
+    }
+
+    public Map<String, String> uploadPic(HttpServletRequest request) {
+        String treatBillNo = request.getParameter("treatBillNo");
+        String zhiliaoNo = request.getParameter("zhiliaoNo");
+        Map<String, String> ret = new HashMap<>();
+        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(
+            request.getSession().getServletContext());
+        String rootPath = "/gyt/uploadPic/";
+        if (multipartResolver.isMultipart(request)) {
+            MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
+            Iterator<String> iter = multiRequest.getFileNames();
+            while (iter.hasNext()) {
+                MultipartFile file = multiRequest.getFile(iter.next());
+                String myFileName = file.getOriginalFilename();
+                String fullFileName = rootPath + myFileName;
+                File fullPathFile = new File(fullFileName);
+                System.out.println(myFileName);
+                try {
+                    // 保存文件到本地
+                    file.transferTo(fullPathFile);
+                    // 保存文件路径到数据库
+                    Integer treatLogId = getTreatLogId(treatBillNo, zhiliaoNo);
+                    Map<String, Object> tm = new HashMap<>();
+                    tm.put("tl_id", treatLogId);
+                    tm.put("pic_path", fullFileName);
+                    ret.put("msg", "上传成功");
+                    treatLogDao.insertUploadPic(tm);
+                } catch (IOException e) {
+                    ret.put("msg", "上传失败");
+                    e.printStackTrace();
+                }
+            }
+        }
+        return ret;
+    }
 }

@@ -158,6 +158,7 @@
                                     var iframeIndex = parent.layer.getFrameIndex(window.name);
                                     parent.layer.close(iframeIndex);
                                     parent.location.reload();
+                                    // window.location.href="upload.jsp?treatBillId="+data['treatBillId']+"&zhiliaoNo="+zhiliaoNo;
                                 }, 1 * 1000 );
 
                             }else{

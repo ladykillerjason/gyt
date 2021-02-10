@@ -57,6 +57,10 @@ public class PageController {
     public String finishTreat() {
         return "/patientQueue/finishTreat";
     }
+    @RequestMapping("/patientQueue/upload")
+    public String finishTreatUploadPic() {
+        return "/patientQueue/upload";
+    }
     @RequestMapping("/patientQueue/query-treatBill")
     public String queryTreatBill() {
         return "/patientQueue/query-treatBill";

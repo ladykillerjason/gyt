@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 @RequestMapping("/treatLog")
 public class TreatLogController {
@@ -33,6 +35,12 @@ public class TreatLogController {
     @ResponseBody
     public Map addTreatBill(@RequestBody Map<String, Object> param) {
         return treatLogService.addTreatLog(param);
+    }
+
+    @RequestMapping("/upload")
+    @ResponseBody
+    public Map upload(HttpServletRequest request) {
+        return treatLogService.uploadPic(request);
     }
 
 }
