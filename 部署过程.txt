@@ -12,3 +12,36 @@ set "JAVA_OPTS=%JAVA_OPTS% -Djava.protocol.handler.pkgs=org.apache.catalina.webr
 下载mysql
 https://dev.mysql.com/downloads/mysql/5.7.html?os=src
 https://downloads.mysql.com/archives/community/
+
+
+
+listenSwitch: function (options) {
+            options.filter = options.filter || null;
+            options.multiModule = options.multiModule || false;
+            options.urlHashLocation = options.urlHashLocation || false;
+            options.listenSwichCallback = options.listenSwichCallback || function () {
+
+            };
+            element.on('tab(' + options.filter + ')', function (data) {
+                var tabId = $(this).attr('lay-id');
+                if (options.urlHashLocation) {
+                    location.hash = '/' + tabId;
+                }
+                if (typeof options.listenSwichCallback === 'function') {
+                    options.listenSwichCallback();
+                }
+                // 判断是否为新增窗口
+                if ($('.layuimini-menu-left').attr('layuimini-tab-tag') === 'add') {
+                    $('.layuimini-menu-left').attr('layuimini-tab-tag', 'no')
+                } else {
+                    $("[layuimini-href]").parent().removeClass('layui-this');
+                    if (options.multiModule) {
+                        miniTab.listenSwitchMultiModule(tabId);
+                    } else {
+                        miniTab.listenSwitchSingleModule(tabId);
+                    }
+                }
+                $(".layui-tab-item.layui-show").find("iframe")[0].contentWindow.location.reload();
+                miniTab.rollPosition();
+            });
+        },

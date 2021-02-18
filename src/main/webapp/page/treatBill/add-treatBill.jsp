@@ -102,34 +102,30 @@
             }
             newData['projects'] = projects;
 
-            var index = layer.alert(JSON.stringify(newData), {
-                title: '最终的提交信息'
-            }, function () {
-                $.ajax({
-                    url: '/treatBill/add.do',
-                    type: 'post',
-                    dataType: 'json',
-                    contentType: 'application/json',
-                    data: JSON.stringify(newData),
-                    timeout: 2000,
-                    success: function (ret) {
-                        console.log(ret);
-                        if (ret.status == 'success') {
-                            layer.msg("新增成功");
+            $.ajax({
+                url: '/treatBill/add.do',
+                type: 'post',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify(newData),
+                timeout: 2000,
+                success: function (ret) {
+                    console.log(ret);
+                    if (ret.status == 'success') {
+                        layer.msg("新增成功");
 
-                            layer.close(index);
-                            var iframeIndex = parent.layer.getFrameIndex(window.name);
-                            parent.layer.close(iframeIndex);
+                        var iframeIndex = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(iframeIndex);
+                        setTimeout(function(){
                             window.location.href="success.jsp"
-                        } else {
-                            layer.msg("新增失败")
-                        }
-                    },
-                    error: function () {
+                        },1000)
+                    } else {
                         layer.msg("新增失败")
                     }
-                })
-                layer.close(index);
+                },
+                error: function () {
+                    layer.msg("新增失败")
+                }
             })
             return false;
         });

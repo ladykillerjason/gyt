@@ -125,7 +125,7 @@ public class TreatLogService {
 
     public Integer getTreatLogId(Integer treatBillId, String zhiliaoNo, Integer treatCount) {
         Map<String, Object> map = new HashMap<>();
-        map.put("tb_id", treatBillId);
+        map.put("tb_id", treatBillId);  // 这个tb_id已经包含了治疗项目的信息
         map.put("zhiliao_no", zhiliaoNo);
         map.put("treat_count", treatCount);
         List<Map> ret = treatLogDao.findTreatLogsPure(map);
